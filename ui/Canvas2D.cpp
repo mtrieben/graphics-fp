@@ -113,7 +113,6 @@ void Canvas2D::renderImage(CS123SceneCameraData *camera, int width, int height) 
     if (m_rayScene) {
         // @TODO: raytrace the scene based on settings
         //        YOU MUST FILL THIS IN FOR INTERSECT/RAY
-
         // If you want the interface to stay responsive, make sure to call
         // QCoreApplication::processEvents() periodically during the rendering.
         camera->aspectRatio = ((float) width) / height;
