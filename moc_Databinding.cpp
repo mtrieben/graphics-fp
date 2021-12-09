@@ -1,19 +1,18 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'Databinding.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.14.2)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.12.11)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include <memory>
 #include "ui/Databinding.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'Databinding.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.14.2. It"
+#error "This file was generated using the moc from 5.12.11. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -86,7 +85,7 @@ void DataBinding::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
 }
 
 QT_INIT_METAOBJECT const QMetaObject DataBinding::staticMetaObject = { {
-    QMetaObject::SuperData::link<QObject::staticMetaObject>(),
+    &QObject::staticMetaObject,
     qt_meta_stringdata_DataBinding.data,
     qt_meta_data_DataBinding,
     qt_static_metacall,
@@ -219,7 +218,7 @@ void IntBinding::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
 }
 
 QT_INIT_METAOBJECT const QMetaObject IntBinding::staticMetaObject = { {
-    QMetaObject::SuperData::link<DataBinding::staticMetaObject>(),
+    &DataBinding::staticMetaObject,
     qt_meta_stringdata_IntBinding.data,
     qt_meta_data_IntBinding,
     qt_static_metacall,
@@ -261,14 +260,14 @@ int IntBinding::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void IntBinding::updateInt(int _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
 void IntBinding::updateString(QString _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 struct qt_meta_stringdata_UCharBinding_t {
@@ -360,7 +359,7 @@ void UCharBinding::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
 }
 
 QT_INIT_METAOBJECT const QMetaObject UCharBinding::staticMetaObject = { {
-    QMetaObject::SuperData::link<DataBinding::staticMetaObject>(),
+    &DataBinding::staticMetaObject,
     qt_meta_stringdata_UCharBinding.data,
     qt_meta_data_UCharBinding,
     qt_static_metacall,
@@ -402,14 +401,14 @@ int UCharBinding::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void UCharBinding::updateInt(int _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
 void UCharBinding::updateString(QString _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 struct qt_meta_stringdata_FloatBinding_t {
@@ -501,7 +500,7 @@ void FloatBinding::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
 }
 
 QT_INIT_METAOBJECT const QMetaObject FloatBinding::staticMetaObject = { {
-    QMetaObject::SuperData::link<DataBinding::staticMetaObject>(),
+    &DataBinding::staticMetaObject,
     qt_meta_stringdata_FloatBinding.data,
     qt_meta_data_FloatBinding,
     qt_static_metacall,
@@ -543,14 +542,14 @@ int FloatBinding::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void FloatBinding::updateInt(int _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
 void FloatBinding::updateString(QString _t1)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 struct qt_meta_stringdata_BoolBinding_t {
@@ -609,7 +608,7 @@ void BoolBinding::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
 }
 
 QT_INIT_METAOBJECT const QMetaObject BoolBinding::staticMetaObject = { {
-    QMetaObject::SuperData::link<DataBinding::staticMetaObject>(),
+    &DataBinding::staticMetaObject,
     qt_meta_stringdata_BoolBinding.data,
     qt_meta_data_BoolBinding,
     qt_static_metacall,
@@ -703,7 +702,7 @@ void ChoiceBinding::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
 }
 
 QT_INIT_METAOBJECT const QMetaObject ChoiceBinding::staticMetaObject = { {
-    QMetaObject::SuperData::link<DataBinding::staticMetaObject>(),
+    &DataBinding::staticMetaObject,
     qt_meta_stringdata_ChoiceBinding.data,
     qt_meta_data_ChoiceBinding,
     qt_static_metacall,

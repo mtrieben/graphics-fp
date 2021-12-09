@@ -66,7 +66,14 @@ SOURCES += \
     gl/util/FullScreenQuad.cpp \
     main.cpp \
     glew-1.10.0/src/glew.c \
-    lib/RGBA.cpp
+    lib/RGBA.cpp \
+    voronoi/Datastruct/Beachline.cpp \
+    voronoi/Datastruct/DCEL.cpp \
+    voronoi/Math/Circle.cpp \
+    voronoi/Math/Parabola.cpp \
+    voronoi/Types/Point2D.cpp \
+    voronoi/Voronoi/VoronoiDiagram.cpp \
+    voronoi/Voronoi_Main.cpp
 
 
 HEADERS += \
@@ -117,7 +124,14 @@ HEADERS += \
     lib/CS123ISceneParser.h \
     lib/ResourceLoader.h \
     glew-1.10.0/include/GL/glew.h \
-    lib/RGBA.h
+    lib/RGBA.h \
+    voronoi/Datastruct/Beachline.h \
+    voronoi/Datastruct/DCEL.h \
+    voronoi/Math/Circle.h \
+    voronoi/Math/Parabola.h \
+    voronoi/Types/Point2D.h \
+    voronoi/Voronoi/VoronoiDiagram.h \
+    voronoi/Voronoi_Main.h
 
 
 FORMS += ui/mainwindow.ui

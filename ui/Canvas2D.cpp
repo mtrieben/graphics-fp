@@ -21,6 +21,7 @@
 #include <QCoreApplication>
 #include <QPainter>
 
+#include "voronoi/Voronoi_Main.h"
 
 Canvas2D::Canvas2D() :
     m_rayScene(nullptr)
@@ -55,14 +56,90 @@ void Canvas2D::settingsChanged() {
 // ** BRUSH
 // ********************************************************************************************
 
+void plotLineLow(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
+    int dx = x1 - x0;
+    int dy = y1 - y0;
+    int yi = 1;
+
+    if (dy < 0) {
+        yi = -1;
+        dy = -dy;
+    }
+
+    int D = 2*dy - dx;
+    int yY = y0;
+
+    for (int xX = x0; xX < x1; xX++) {
+        if (!(xX > canvas->width() || xX < 0 || yY > canvas->height() || yY < 0)) {
+            canvas->data()[xX*canvas->width()+yY].r = 255;
+            canvas->data()[xX*canvas->width()+yY].g = 255;
+            canvas->data()[xX*canvas->width()+yY].b = 255;
+        }
+        if (D > 0) {
+            yY += yi;
+            D += 2*(dy-dx);
+        } else {
+            D += 2 * dy;
+        }
+    }
+}
+
+void plotLineHigh(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
+    int dx = x1 - x0;
+    int dy = y1 - y0;
+    int xi = 1;
+
+    if (dx < 0) {
+        xi = -1;
+        dx = -dx;
+    }
+
+    int D = 2*dx - dy;
+    int xX = x0;
+
+    for (int yY = y0; yY < y1; yY++) {
+        if (!(xX > canvas->width() || xX < 0 || yY > canvas->height() || yY < 0)) {
+            canvas->data()[xX*canvas->width()+yY].r = 255;
+            canvas->data()[xX*canvas->width()+yY].g = 255;
+            canvas->data()[xX*canvas->width()+yY].b = 255;
+        }
+        if (D > 0) {
+            xX += xi;
+            D += 2*(dx-dy);
+        } else {
+            D += 2 * dx;
+        }
+    }
+}
+
+void plotLine(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
+    if (abs(y1 - y0) < abs(x1 - x0)) {
+        if (x0 > x1) {
+            plotLineLow(x1, y1, x0, y0, canvas);
+        } else {
+            plotLineLow(x0, y0, x1, y1, canvas);
+        }
+    } else {
+        if (y0 > y1) {
+            plotLineHigh(x1, y1, x0, y0, canvas);
+        } else {
+            plotLineHigh(x0, y0, x1, y1, canvas);
+        }
+    }
+}
 
 void Canvas2D::mouseDown(int x, int y) {
 
     // You're going to need to leave the alpha value on the canvas itself at 255, but you will
     // need to use the actual alpha value to compute the new color of the pixel
 
-    std::cout << "Canvas2d::mouseDown() called" << std::endl;
+    std::cout << "Canvas2d::mouseDown() called" << x << y << std::endl;
+    std::vector<float> edges = Voronoi_Main::main();
 
+    for (int i = 0; i < edges.size(); i += 4) {
+        std::cout << (int) edges[i] << ", " << (int) edges[i+1] << ", " << (int) edges[i+2] << ", " << (int) edges[i+3] << std::endl;
+        plotLine((int) edges[i], (int) edges[i+1], (int) edges[i+2], (int) edges[i+3], this);
+    }
 }
 
 void Canvas2D::mouseDragged(int x, int y) {
@@ -110,7 +187,7 @@ void Canvas2D::setScene(RayScene *scene) {
 }
 
 void Canvas2D::renderImage(CS123SceneCameraData *camera, int width, int height) {
-    if (m_rayScene) {
+  if (m_rayScene) {
         // @TODO: raytrace the scene based on settings
         //        YOU MUST FILL THIS IN FOR INTERSECT/RAY
 
