@@ -2990,10 +2990,6 @@ mainwindow.o: ui/mainwindow.cpp ui/mainwindow.h \
 		../../../Qt/5.12.11/clang_64/lib/QtWidgets.framework/Headers/QMainWindow \
 		../../../Qt/5.12.11/clang_64/lib/QtWidgets.framework/Headers/qmainwindow.h \
 		ui_mainwindow.h \
-		ui/Canvas2D.h \
-		ui/SupportCanvas2D.h \
-		../../../Qt/5.12.11/clang_64/lib/QtWidgets.framework/Headers/QWidget \
-		../../../Qt/5.12.11/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
 		ui/Databinding.h \
 		../../../Qt/5.12.11/clang_64/lib/QtCore.framework/Headers/QObject \
 		../../../Qt/5.12.11/clang_64/lib/QtCore.framework/Headers/qobject.h \
@@ -3108,6 +3104,10 @@ mainwindow.o: ui/mainwindow.cpp ui/mainwindow.h \
 		lib/RGBA.h \
 		scenegraph/Ray.h \
 		ui/Settings.h \
+		ui/Canvas2D.h \
+		ui/SupportCanvas2D.h \
+		../../../Qt/5.12.11/clang_64/lib/QtWidgets.framework/Headers/QWidget \
+		../../../Qt/5.12.11/clang_64/lib/QtWidgets.framework/Headers/qwidget.h \
 		scenegraph/ShapesScene.h \
 		scenegraph/OpenGLScene.h \
 		gl/datatype/FBO.h \

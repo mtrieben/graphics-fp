@@ -47,12 +47,21 @@ MainWindow::MainWindow(QWidget *parent) :
 #define SETUP_ACTION(dock, key) \
     actions.push_back(ui->dock->toggleViewAction()); \
     actions.back()->setShortcut(QKeySequence(key));
+
+//    SETUP_ACTION(brushDock,     "CTRL+1");
+//    SETUP_ACTION(filterDock,    "CTRL+2");
+//    SETUP_ACTION(shapesDock,    "CTRL+3");
     SETUP_ACTION(camtransDock,  "CTRL+4");
     SETUP_ACTION(rayDock,       "CTRL+5");
 
     ui->menuToolbars->addActions(actions);
 #undef SETUP_ACTION
 
+//    tabifyDockWidget(ui->brushDock, ui->filterDock);
+//    tabifyDockWidget(ui->brushDock, ui->shapesDock);
+//    tabifyDockWidget(ui->brushDock, ui->camtransDock);
+//    tabifyDockWidget(ui->brushDock, ui->rayDock);
+//    ui->brushDock->raise();
 
     dataBind();
 
@@ -64,6 +73,32 @@ MainWindow::MainWindow(QWidget *parent) :
     fileNew();
 
     // Make certain radio buttons switch to the 2D canvas when clicked.
+//    QList<QRadioButton*> a;
+//    a += ui->brushTypeLinear;
+//    a += ui->brushTypeQuadratic;
+//    a += ui->brushTypeSmudge;
+//    a += ui->brushTypeConstant;
+//    a += ui->brushTypeSpecial1;
+//    a += ui->brushTypeSpecial2;
+//    a += ui->filterTypeBlur;
+//    a += ui->filterTypeEdgeDetect;
+//    a += ui->filterTypeRotate;
+//    a += ui->filterTypeScale;
+//    a += ui->filterTypeSpecial1;
+//    a += ui->filterTypeSpecial2;
+//    a += ui->filterTypeSpecial3;
+//    foreach (QRadioButton *rb, a)
+//        connect(rb, SIGNAL(clicked()), this, SLOT(activateCanvas2D()));
+
+//    a.clear();
+//    a += ui->shapeTypeCone;
+//    a += ui->shapeTypeCube;
+//    a += ui->shapeTypeCylinder;
+//    a += ui->shapeTypeTorus;
+//    a += ui->shapeTypeSpecial1;
+//    a += ui->shapeTypeSpecial2;
+//    foreach (QRadioButton *rb, a)
+//        connect(rb, SIGNAL(clicked()), this, SLOT(activateCanvas3D()));
 
     QWidget *widget = ui->tabWidget->currentWidget();
     ui->tabWidget->setCurrentWidget(ui->tab3D);
@@ -119,7 +154,7 @@ void MainWindow::dataBind() {
 //        ui->brushColorSliderAlpha, ui->brushColorTextboxAlpha, settings.brushColor.a, 0, 255))
 //    BIND(BoolBinding::bindCheckbox(ui->brushAlphaBlendingCheckbox, settings.fixAlphaBlending))
 
-//    // Filter dock
+    // Filter dock
 //    BIND(ChoiceBinding::bindRadioButtons(
 //            filterButtonGroup,
 //            NUM_FILTER_TYPES,
@@ -144,7 +179,7 @@ void MainWindow::dataBind() {
 //        ui->rotateSlider, ui->rotateAngleEdit, settings.rotateAngle, -360.f, 360.f))
 
     // Shapes dock
-//    BIND(BoolBinding::bindCheckbox(ui->showSceneviewInstead, settings.useSceneviewScene))
+ //   BIND(BoolBinding::bindCheckbox(ui->showSceneviewInstead, settings.useSceneviewScene))
 //    BIND(ChoiceBinding::bindRadioButtons(
 //            shapesButtonGroup,
 //            NUM_SHAPE_TYPES,
@@ -287,7 +322,8 @@ void MainWindow::fileOpen() {
             m_sceneParser = std::unique_ptr<CS123XmlSceneParser>(new CS123XmlSceneParser(file.toLatin1().data()));
             if (m_sceneParser->parse()) {
                 m_canvas3D->loadSceneviewSceneFromParser(*m_sceneParser);
-              //  ui->showSceneviewInstead->setChecked(true);
+                //
+                //ui->showSceneviewInstead->setChecked(true);
 
                 // Set the camera for the new scene
                 CS123SceneCameraData camera;
@@ -382,6 +418,9 @@ void MainWindow::renderImage() {
 
 void MainWindow::setAllEnabled(bool enabled) {
     QList<QWidget *> widgets;
+//    widgets += ui->brushDock;
+//    widgets += ui->filterDock;
+//    widgets += ui->shapesDock;
     widgets += ui->camtransDock;
     widgets += ui->rayAllOrNone;
     widgets += ui->rayFeatures;

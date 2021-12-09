@@ -23,13 +23,13 @@ RayScene::RayScene(Scene &scene) :
 
 // Renders the scene !!
 void RayScene::render(Canvas2D* canvas, int width, int height, CS123SceneCameraData *camera){
+
     setUpCamera(camera);
     m_canvas = canvas;
     RGBA *pix = canvas->data();
     float theta_h = camera->heightAngle * M_PI / 180.f;
     float theta_w = atan(((float)width) / ((float)height) * tan((theta_h)));
     float k = 5.f;
-
     for(int i = 0; i < m_primatives.size(); i++){
         if(m_primatives[i]->primative.material.textureMap.isUsed){
             QString filepath = QString::fromStdString(m_primatives[i]->primative.material.textureMap.filename);

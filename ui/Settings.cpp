@@ -136,10 +136,10 @@ void Settings::saveSettings() {
 }
 
 int Settings::getSceneMode() {
-    if (this->useSceneviewScene)
+    //if (this->useSceneviewScene)
         return SCENEMODE_SCENEVIEW;
-    else
-        return SCENEMODE_SHAPES;
+ //   else
+  //      return SCENEMODE_SHAPES;
 }
 
 int Settings::getCameraMode() {
