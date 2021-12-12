@@ -22,6 +22,7 @@ enum class PrimitiveType {
     PRIMITIVE_CYLINDER,
     PRIMITIVE_TORUS,
     PRIMITIVE_SPHERE,
+    PRIMITIVE_EDGE,
     PRIMITIVE_MESH
 };
 

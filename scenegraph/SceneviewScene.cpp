@@ -12,6 +12,7 @@
 #include "shapes/Cylinder.h"
 #include "shapes/Sphere.h"
 #include "shapes/Cube.h"
+#include "shapes/VoronoiEdge.h"
 using namespace CS123::GL;
 
 
@@ -25,10 +26,30 @@ SceneviewScene::SceneviewScene():
     loadWireframeShader();
     loadNormalsShader();
     loadNormalsArrowShader();
+    initializeEdgeMaterial();
 }
 
 SceneviewScene::~SceneviewScene()
 {
+}
+
+void SceneviewScene::initializeEdgeMaterial(){
+    m_edgeMaterial = CS123SceneMaterial();
+    m_edgeMaterial.cDiffuse = CS123SceneColor(glm::vec4(1,1,1,0));
+    m_edgeMaterial.cAmbient = CS123SceneColor(glm::vec4(.5f, .5f,.5f,0));
+    m_edgeMaterial.cReflective = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_edgeMaterial.cSpecular = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_edgeMaterial.cTransparent = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_edgeMaterial.cEmissive = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_edgeMaterial.textureMap = CS123SceneFileMap();
+    m_edgeMaterial.textureMap.isUsed = false;
+    m_edgeMaterial.blend = 1.f;
+    m_edgeMaterial.shininess = 0.5f;
+}
+
+
+void SceneviewScene::addEdge(VoronoiEdge edge){
+    m_edges.push_back(edge);
 }
 
 void SceneviewScene::loadPhongShader() {
@@ -145,6 +166,7 @@ void SceneviewScene::renderGeometry() {
 
     // For each primitive, if we need to re-tesselate we do, if not, re-draw the existing tesselations
     for (int i = 0; i < m_primatives.size(); i++){
+        continue;
         if(m_tesselate){
             std::unique_ptr<Shape> shape;
             switch(m_primatives[i]->primative.type){
@@ -169,6 +191,12 @@ void SceneviewScene::renderGeometry() {
         m_phongShader->applyMaterial(m_primatives[i]->primative.material);
         m_phongShader->setUniform("m", m_primatives[i]->transformation);
         m_shape->setVertexData(m_primShapes[i].data);
+        m_shape->draw();
+    }
+    for(int i = 0; i < m_edges.size(); i++){
+        m_phongShader->applyMaterial(m_edgeMaterial);
+        m_phongShader->setUniform("m", glm::mat4x4());
+        m_shape->setVertexData(m_edges[i].getVertexData());
         m_shape->draw();
     }
     m_tesselate = false;

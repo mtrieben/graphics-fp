@@ -127,6 +127,7 @@ void SupportCanvas3D::settingsChanged() {
     update(); /* repaint the scene */
 }
 
+
 void SupportCanvas3D::setSceneFromSettings() {
     switch(settings.getSceneMode()) {
         case SCENEMODE_SHAPES:
@@ -143,6 +144,10 @@ void SupportCanvas3D::loadSceneviewSceneFromParser(CS123XmlSceneParser &parser) 
     m_sceneviewScene = std::make_unique<SceneviewScene>();
     Scene::parse(m_sceneviewScene.get(), &parser);
     m_settingsDirty = true;
+}
+
+void SupportCanvas3D::addEdge(VoronoiEdge edge){
+    m_sceneviewScene->addEdge(edge);
 }
 
 void SupportCanvas3D::setSceneToSceneview() {

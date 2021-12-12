@@ -92,7 +92,7 @@ std::vector<Point2D> randomPoint(int number) {
     std::vector<Point2D> points;
     for (int i = 0; i < number; ++i) {
         double x = random_number(), y = random_number();
-        points.push_back(Point2D(x*500.f, y*500.f));
+        points.push_back(Point2D(x*200.f, y*200.f));
     }
     std::sort(points.begin(), points.end(), [](const Point2D &p1, const Point2D &p2) {
         return (fabs(p1.y - p2.y) < POINT_EPSILON && p1.x < p2.x) || (fabs(p1.y - p2.y) >= POINT_EPSILON && p1.y < p2.y);
@@ -171,7 +171,7 @@ std::vector<float> Voronoi_Main::main() {
         std::vector<double> _x, _y;
         _x.push_back(points[i].x); _y.push_back(points[i].y);
 //        plt::named_plot(std::to_string(i), _x, _y, ".");
-        std::cout << "point " << i+1 << ": " << points[i].x << ", " << points[i].y << std::endl;
+       // std::cout << "point " << i+1 << ": " << points[i].x << ", " << points[i].y << std::endl;
     }
 
     // Construct Voronoi diagram
@@ -182,7 +182,7 @@ std::vector<float> Voronoi_Main::main() {
         std::vector<double> x(2, 0.0), y(2, 0.0);
         initEdgePointsVis(h, x, y, points);
 
-        std::cout << x[0] << ", " << y[0] << ", " << x[1] << ", " << y[1] << std::endl;
+    //    std::cout << x[0] << ", " << y[0] << ", " << x[1] << ", " << y[1] << std::endl;
         res.push_back(x[0]);
         res.push_back(y[0]);
         res.push_back(x[1]);

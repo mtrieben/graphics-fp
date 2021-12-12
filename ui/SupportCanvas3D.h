@@ -2,6 +2,7 @@
 #define SUPPORTCANVAS3D_H
 
 #include <memory>
+#include "shapes/VoronoiEdge.h"
 
 #include "GL/glew.h"
 #include <QGLWidget>
@@ -70,6 +71,7 @@ public slots:
     void updateCameraRotationV();
     void updateCameraRotationN();
     void updateCameraClip();
+    void addEdge(VoronoiEdge edge);
 
 signals:
     void aspectRatioChanged();
@@ -109,6 +111,8 @@ private:
     OpenGLScene *m_currentScene;
     std::unique_ptr<ShapesScene> m_shapesScene;
     std::unique_ptr<SceneviewScene> m_sceneviewScene;
+
+
 };
 
 #endif // SUPPORTCANVAS3D_H

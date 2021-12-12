@@ -3,6 +3,8 @@
 
 #include "OpenGLScene.h"
 #include "shapes/Shape.h"
+#include "shapes/VoronoiEdge.h"
+
 
 #include <memory>
 
@@ -35,6 +37,7 @@ struct PrimShape {
  * OpenGL to do the rendering. In Intersect and Ray, you will be responsible for that.
  */
 class SceneviewScene : public OpenGLScene {
+
 public:
     SceneviewScene();
     virtual ~SceneviewScene();
@@ -45,6 +48,7 @@ public:
     // Use this method to set an internal selection, based on the (x, y) position of the mouse
     // pointer.  This will be used during the "modeler" lab, so don't worry about it for now.
     void setSelection(int x, int y);
+    void addEdge(VoronoiEdge edge);
 
 private:
 
@@ -61,6 +65,7 @@ private:
     void setMatrixUniforms(CS123::GL::Shader *shader, SupportCanvas3D *context);
     void setLights();
     void renderGeometry();
+    void initializeEdgeMaterial();
 
     std::unique_ptr<CS123::GL::CS123Shader> m_phongShader;
     std::unique_ptr<CS123::GL::Shader> m_wireframeShader;
@@ -73,6 +78,8 @@ private:
     bool m_initialize;
     std::unique_ptr<Shape> m_shape;
     std::vector<PrimShape> m_primShapes;
+    std::vector<VoronoiEdge> m_edges;
+    CS123SceneMaterial m_edgeMaterial;
 
 };
 

@@ -41,6 +41,7 @@ SOURCES += \
     shapes/OpenGLShape.cpp \
     shapes/Shape.cpp \
     shapes/Sphere.cpp \
+    shapes/VoronoiEdge.cpp \
     ui/Canvas2D.cpp \
     ui/SupportCanvas2D.cpp \
     ui/SupportCanvas3D.cpp \
@@ -96,6 +97,7 @@ HEADERS += \
     shapes/OpenGLShape.h \
     shapes/Shape.h \
     shapes/Sphere.h \
+    shapes/VoronoiEdge.h \
     ui/Canvas2D.h \
     ui/SupportCanvas2D.h \
     ui/SupportCanvas3D.h \
