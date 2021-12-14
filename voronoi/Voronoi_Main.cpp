@@ -316,8 +316,8 @@ std::vector<std::vector<float>> generateSecondaryRoads(std::vector<std::vector<f
     std::vector<std::vector<float>> res = {};
     std::vector<float> topLeftBottomRight = getBounds(face_points);
 
-    for (float x = std::max(topLeftBottomRight[0] + 15.f, 0.f); x < std::min(topLeftBottomRight[2] - 15.f, 200.f); x += 15) {
-        for (float y = std::max(topLeftBottomRight[1] + 15.f, 0.f); y < std::min(topLeftBottomRight[3] - 15.f, 200.f); y += 15) {
+    for (float x = std::max(topLeftBottomRight[0] + 5.f, 0.f); x < std::min(topLeftBottomRight[2] - 5.f, 200.f); x += 15) {
+        for (float y = std::max(topLeftBottomRight[1] + 5.f, 0.f); y < std::min(topLeftBottomRight[3] - 5.f, 200.f); y += 15) {
             if (pointInPolygon(x, y, face_points)) {
                 pointSet.push_back(Point2D(x, y));
             }
