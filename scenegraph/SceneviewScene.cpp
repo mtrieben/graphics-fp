@@ -166,7 +166,7 @@ void SceneviewScene::renderGeometry() {
 
     // For each primitive, if we need to re-tesselate we do, if not, re-draw the existing tesselations
     for (int i = 0; i < m_primatives.size(); i++){
-        continue;
+        //continue;
         if(m_tesselate){
             std::unique_ptr<Shape> shape;
             switch(m_primatives[i]->primative.type){

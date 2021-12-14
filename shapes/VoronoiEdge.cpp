@@ -17,43 +17,40 @@ VoronoiEdge::VoronoiEdge(float x0, float y0, float x1, float y1, int width){
 void VoronoiEdge::generateVertices(float x0, float y0, float x1, float y1, int width){
 //    int cutoff = 100;
 //    x0 = std::min(std::max(x0,-cutoff),cutoff);
-//    y0 = std::min(std::max(y0,-cutoff),cutoff);
+//    y0(std::max(y0,-cutoff),cutoff); = std::min
 //    x1 = std::min(std::max(x1,-cutoff),cutoff);
 //    y1 = std::min(std::max(y1,-cutoff),cutoff);
-
-
-    float slope = ((float)y1-y0) /((float)x1-x0);
-    glm::vec3 start = glm::vec3((float)x0,(float)y0,0.f);
-    glm::vec3 end = glm::vec3((float)x1,(float)y1,0.f);
-    float slope2 = -1.f / slope;
-    glm::vec3 v = glm::normalize(glm::vec3(1.f, slope2,0.f));
     glm::vec3 right0;
     glm::vec3 left0;
     glm::vec3 right1;
     glm::vec3 left1;
 
-    if(slope2 < 0){
-        right0 = start + (width/2.f)*v;
-        right1 = end + (width/2.f)*v;
-        left0 = start - (width/2.f)*v;
-        left1 = end - (width/2.f)*v;
+    glm::vec3 start = glm::vec3((float)x0,(float)y0,0.f);
+    glm::vec3 end = glm::vec3((float)x1,(float)y1,0.f);
+
+    float slope = ((float)y1-y0) /((float)x1-x0);
+    if(slope <= 0.05f && slope >= -0.05f){
+        left0 = glm::vec3(start[0], start[1]-(width/2.f), 0.f);
+        left1 = glm::vec3(end[0], end[1]-(width/2.f), 0.f);
+        right0 = glm::vec3(start[0], start[1]+(width/2.f), 0.f);
+        right1 = glm::vec3(end[0], end[1]+(width/2.f), 0.f);
+
     }else{
-        right0 = start - (width/2.f)*v;
-        right1 = end - (width/2.f)*v;
-        left0 = start + (width/2.f)*v;
-        left1 = end + (width/2.f)*v;
+
+        float slope2 = -1.f / slope;
+        glm::vec3 v = glm::normalize(glm::vec3(1.f, slope2,0.f));
+        if(slope2 < 0){
+            right0 = start + (width/2.f)*v;
+            right1 = end + (width/2.f)*v;
+            left0 = start - (width/2.f)*v;
+            left1 = end - (width/2.f)*v;
+        }else{
+            right0 = start - (width/2.f)*v;
+            right1 = end - (width/2.f)*v;
+            left0 = start + (width/2.f)*v;
+            left1 = end + (width/2.f)*v;
+        }
     }
-//    float cutoff = 100.f;
-//    left0[0] = std::min(std::max(left0[0],-cutoff),cutoff);
-//    right0[0] = std::min(std::max(right0[0],-cutoff),cutoff);
-//    left1[0] = std::min(std::max(left1[0],-cutoff),cutoff);
-//    right1[0] = std::min(std::max(right1[0],-cutoff),cutoff);
-
-//    left0[1] = std::min(std::max(left0[1],-cutoff),cutoff);
-//    right0[1] = std::min(std::max(right0[1],-cutoff),cutoff);
-//    left1[1] = std::min(std::max(left1[1],-cutoff),cutoff);
-//    right1[1] = std::min(std::max(right1[1],-cutoff),cutoff);
-
 
     left0[2] = 0.001f;
     right0[2] = 0.001f;

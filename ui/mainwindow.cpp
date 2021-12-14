@@ -329,13 +329,13 @@ void MainWindow::fileOpen() {
                 m_canvas3D->loadSceneviewSceneFromParser(*m_sceneParser);
 
                 for (int set = 0; set < m_edges.size(); set++) {
-                    int width = 1;
+                    int width = 2;
                     if(set == m_edges.size() - 1){
-                        width = 2;
+                        width = 5;
                     }
                     for (int i = 0; i < m_edges[set].size(); i+=2) {
-                        std::cout << "edge:" << std::endl;
-                        std::cout << m_edges[set][i][0] << " " << m_edges[set][i][1] << " " << m_edges[set][i+1][0] << " " << m_edges[set][i+1][1] << std::endl;
+//                        std::cout << "edge:" << std::endl;
+//                        std::cout << m_edges[set][i][0] << " " << m_edges[set][i][1] << " " << m_edges[set][i+1][0] << " " << m_edges[set][i+1][1] << std::endl;
                         std::unique_ptr<VoronoiEdge> edge = std::make_unique<VoronoiEdge>(m_edges[set][i][0]-100.f, m_edges[set][i][1]-100.f, m_edges[set][i+1][0]-100.f, m_edges[set][i+1][1]-100.f,width);
                         m_canvas3D->addEdge(edge.operator*());
                     }
