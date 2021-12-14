@@ -6,7 +6,7 @@ VoronoiEdge::VoronoiEdge()
 
 }
 
-VoronoiEdge::VoronoiEdge(int x0, int y0, int x1, int y1, int width){
+VoronoiEdge::VoronoiEdge(float x0, float y0, float x1, float y1, int width){
     generateVertices(x0, y0, x1, y1, width);
     //generateTriangles(baseVertices);
     //();
@@ -14,7 +14,7 @@ VoronoiEdge::VoronoiEdge(int x0, int y0, int x1, int y1, int width){
 
 
 
-void VoronoiEdge::generateVertices(int x0, int y0, int x1, int y1, int width){
+void VoronoiEdge::generateVertices(float x0, float y0, float x1, float y1, int width){
 //    int cutoff = 100;
 //    x0 = std::min(std::max(x0,-cutoff),cutoff);
 //    y0 = std::min(std::max(y0,-cutoff),cutoff);
@@ -59,7 +59,7 @@ void VoronoiEdge::generateVertices(int x0, int y0, int x1, int y1, int width){
     right0[2] = 0.001f;
     left1[2] = 0.001f;
     right1[2] = 0.001f;
-   // std::cout << left0[0] << ", " << left0[1] << ", " << left1[0] << ", " << left1[1] << std::endl;
+    std::cout << left0[0] << ", " << left0[1] << ", " << left1[0] << ", " << left1[1] << std::endl;
 
     glm::vec3 normal = glm::vec3(0,0,1);
     this->addToVector(left0);

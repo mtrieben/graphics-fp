@@ -30,7 +30,7 @@ public:
     virtual void settingsChanged();
 
     QImage* getImage() { return m_image; }
-    void setEdges(std::vector<float> e);
+    void setEdges(std::vector<std::vector<std::vector<float>>> e);
 
 
 public slots:
@@ -54,7 +54,7 @@ protected:
 private:
 
     std::unique_ptr<RayScene> m_rayScene;
-    std::vector<float> m_edges;
+    std::vector<std::vector<std::vector<float>>> m_edges;
 
 };
 

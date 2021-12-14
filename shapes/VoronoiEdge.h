@@ -8,11 +8,11 @@ class VoronoiEdge
 {
 public:
     VoronoiEdge();
-    VoronoiEdge(int x0, int y0, int x1, int y1, int width);
+    VoronoiEdge(float x0, float y0, float x1, float y1, int width);
     std::vector<GLfloat> getVertexData();
 
 protected:
-    void generateVertices(int x0, int y0, int x1, int y1, int width);
+    void generateVertices(float x0, float y0, float x1, float y1, int width);
     void addToVector(glm::vec3 vec);
     std::vector<GLfloat> m_vertexData;
 
