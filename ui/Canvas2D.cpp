@@ -56,7 +56,7 @@ void Canvas2D::settingsChanged() {
 // ** BRUSH
 // ********************************************************************************************
 
-void plotLineLow(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
+void plotLineLow(int x0, int y0, int x1, int y1, Canvas2D *canvas, RGBA color) {
     int dx = x1 - x0;
     int dy = y1 - y0;
     int yi = 1;
@@ -71,9 +71,9 @@ void plotLineLow(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
 
     for (int xX = x0; xX < x1; xX++) {
         if (!(xX > canvas->width() || xX < 0 || yY > canvas->height() || yY < 0)) {
-            canvas->data()[xX*canvas->width()+yY].r = 255;
-            canvas->data()[xX*canvas->width()+yY].g = 255;
-            canvas->data()[xX*canvas->width()+yY].b = 255;
+            canvas->data()[xX*canvas->width()+yY].r = color.r;
+            canvas->data()[xX*canvas->width()+yY].g = color.g;
+            canvas->data()[xX*canvas->width()+yY].b = color.b;
         }
         if (D > 0) {
             yY += yi;
@@ -84,7 +84,7 @@ void plotLineLow(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
     }
 }
 
-void plotLineHigh(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
+void plotLineHigh(int x0, int y0, int x1, int y1, Canvas2D *canvas, RGBA color) {
     int dx = x1 - x0;
     int dy = y1 - y0;
     int xi = 1;
@@ -99,9 +99,9 @@ void plotLineHigh(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
 
     for (int yY = y0; yY < y1; yY++) {
         if (!(xX > canvas->width() || xX < 0 || yY > canvas->height() || yY < 0)) {
-            canvas->data()[xX*canvas->width()+yY].r = 255;
-            canvas->data()[xX*canvas->width()+yY].g = 255;
-            canvas->data()[xX*canvas->width()+yY].b = 255;
+            canvas->data()[xX*canvas->width()+yY].r = color.r;
+            canvas->data()[xX*canvas->width()+yY].g = color.g;
+            canvas->data()[xX*canvas->width()+yY].b = color.b;
         }
         if (D > 0) {
             xX += xi;
@@ -112,18 +112,18 @@ void plotLineHigh(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
     }
 }
 
-void plotLine(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
+void plotLine(int x0, int y0, int x1, int y1, Canvas2D *canvas, RGBA color) {
     if (abs(y1 - y0) < abs(x1 - x0)) {
         if (x0 > x1) {
-            plotLineLow(x1, y1, x0, y0, canvas);
+            plotLineLow(x1, y1, x0, y0, canvas, color);
         } else {
-            plotLineLow(x0, y0, x1, y1, canvas);
+            plotLineLow(x0, y0, x1, y1, canvas, color);
         }
     } else {
         if (y0 > y1) {
-            plotLineHigh(x1, y1, x0, y0, canvas);
+            plotLineHigh(x1, y1, x0, y0, canvas, color);
         } else {
-            plotLineHigh(x0, y0, x1, y1, canvas);
+            plotLineHigh(x0, y0, x1, y1, canvas, color);
         }
     }
 }
@@ -133,13 +133,17 @@ void Canvas2D::mouseDown(int x, int y) {
     // You're going to need to leave the alpha value on the canvas itself at 255, but you will
     // need to use the actual alpha value to compute the new color of the pixel
 
-    std::cout << "Canvas2d::mouseDown() called" << x << y << std::endl;
-    std::vector<float> edges = Voronoi_Main::main();
+    std::cout << "Canvas2d::mouseDown() called" << std::endl;
+    std::vector<std::vector<std::vector<float>>> edges = Voronoi_Main::main();
+    RGBA color = RGBA{255, 255, 255};
 
-    for (int i = 0; i < edges.size(); i += 4) {
-        std::cout << (int) edges[i] << ", " << (int) edges[i+1] << ", " << (int) edges[i+2] << ", " << (int) edges[i+3] << std::endl;
-        plotLine((int) edges[i], (int) edges[i+1], (int) edges[i+2], (int) edges[i+3], this);
+    for (int set = 0; set < edges.size(); set++) {
+        if (set == edges.size() - 1) color = RGBA{255, 0, 0};
+        for (int i = 0; i < edges[set].size(); i+=2) {
+            plotLine((int) edges[set][i][0], (int) edges[set][i][1], (int) edges[set][i+1][0], (int) edges[set][i+1][1], this, color);
+        }
     }
+
 }
 
 void Canvas2D::mouseDragged(int x, int y) {

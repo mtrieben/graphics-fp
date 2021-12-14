@@ -324,13 +324,13 @@ void MainWindow::fileOpen() {
             m_sceneParser = std::unique_ptr<CS123XmlSceneParser>(new CS123XmlSceneParser(file.toLatin1().data()));
             if (m_sceneParser->parse()) {
                 m_canvas3D->loadSceneviewSceneFromParser(*m_sceneParser);
-                std::vector<float> edges = Voronoi_Main::main();
+//                std::vector<float> edges = Voronoi_Main::main();
 
-                for (int i = 0; i < edges.size(); i += 4) {
-                   // std::cout << (int) edges[i] << ", " << (int) edges[i+1] << ", " << (int) edges[i+2] << ", " << (int) edges[i+3] << std::endl;
-                    std::unique_ptr<VoronoiEdge> edge = std::make_unique<VoronoiEdge>((int) edges[i], (int) edges[i+1], (int) edges[i+2], (int) edges[i+3],2);
-                    m_canvas3D->addEdge(edge.operator*());
-                }
+//                for (int i = 0; i < edges.size(); i += 4) {
+//                   // std::cout << (int) edges[i] << ", " << (int) edges[i+1] << ", " << (int) edges[i+2] << ", " << (int) edges[i+3] << std::endl;
+//                    std::unique_ptr<VoronoiEdge> edge = std::make_unique<VoronoiEdge>((int) edges[i], (int) edges[i+1], (int) edges[i+2], (int) edges[i+3],2);
+//                    m_canvas3D->addEdge(edge.operator*());
+//                }
 
 
 

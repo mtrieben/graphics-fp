@@ -8,7 +8,7 @@ class Voronoi_Main
 public:
     Voronoi_Main();
 
-    static std::vector<float> main();
+    static std::vector<std::vector<std::vector<float>>> main();
 };
 
 #endif // VORONOI_MAIN_H
