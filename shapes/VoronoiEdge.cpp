@@ -1,4 +1,5 @@
 #include "VoronoiEdge.h"
+#include <iostream>
 
 VoronoiEdge::VoronoiEdge()
 {
@@ -14,6 +15,13 @@ VoronoiEdge::VoronoiEdge(int x0, int y0, int x1, int y1, int width){
 
 
 void VoronoiEdge::generateVertices(int x0, int y0, int x1, int y1, int width){
+//    int cutoff = 100;
+//    x0 = std::min(std::max(x0,-cutoff),cutoff);
+//    y0 = std::min(std::max(y0,-cutoff),cutoff);
+//    x1 = std::min(std::max(x1,-cutoff),cutoff);
+//    y1 = std::min(std::max(y1,-cutoff),cutoff);
+
+
     float slope = ((float)y1-y0) /((float)x1-x0);
     glm::vec3 start = glm::vec3((float)x0,(float)y0,0.f);
     glm::vec3 end = glm::vec3((float)x1,(float)y1,0.f);
@@ -35,22 +43,24 @@ void VoronoiEdge::generateVertices(int x0, int y0, int x1, int y1, int width){
         left0 = start + (width/2.f)*v;
         left1 = end + (width/2.f)*v;
     }
-    float cutoff = 200.f;
-    left0[0] = std::min(std::max(left0[0],-cutoff),cutoff);
-    right0[0] = std::min(std::max(right0[0],-cutoff),cutoff);
-    left1[0] = std::min(std::max(left1[0],-cutoff),cutoff);
-    right1[0] = std::min(std::max(right1[0],-cutoff),cutoff);
+//    float cutoff = 100.f;
+//    left0[0] = std::min(std::max(left0[0],-cutoff),cutoff);
+//    right0[0] = std::min(std::max(right0[0],-cutoff),cutoff);
+//    left1[0] = std::min(std::max(left1[0],-cutoff),cutoff);
+//    right1[0] = std::min(std::max(right1[0],-cutoff),cutoff);
 
-    left0[1] = std::min(std::max(left0[1],-cutoff),cutoff);
-    right0[1] = std::min(std::max(right0[1],-cutoff),cutoff);
-    left1[1] = std::min(std::max(left1[1],-cutoff),cutoff);
-    right1[1] = std::min(std::max(right1[1],-cutoff),cutoff);
+//    left0[1] = std::min(std::max(left0[1],-cutoff),cutoff);
+//    right0[1] = std::min(std::max(right0[1],-cutoff),cutoff);
+//    left1[1] = std::min(std::max(left1[1],-cutoff),cutoff);
+//    right1[1] = std::min(std::max(right1[1],-cutoff),cutoff);
 
 
-    left0[2] = 0.5f;
-    right0[2] = 0.5f;
-    left1[2] = 0.5f;
-    right1[2] = 0.5f;
+    left0[2] = 0.001f;
+    right0[2] = 0.001f;
+    left1[2] = 0.001f;
+    right1[2] = 0.001f;
+   // std::cout << left0[0] << ", " << left0[1] << ", " << left1[0] << ", " << left1[1] << std::endl;
+
     glm::vec3 normal = glm::vec3(0,0,1);
     this->addToVector(left0);
     this->addToVector(normal);
@@ -65,6 +75,21 @@ void VoronoiEdge::generateVertices(int x0, int y0, int x1, int y1, int width){
     this->addToVector(normal);
     this->addToVector(right1);
     this->addToVector(normal);
+
+    this->addToVector(left0);
+    this->addToVector(normal);
+    this->addToVector(left1);
+    this->addToVector(normal);
+    this->addToVector(right1);
+    this->addToVector(normal);
+
+    this->addToVector(left0);
+    this->addToVector(normal);
+    this->addToVector(right1);
+    this->addToVector(normal);
+    this->addToVector(right0);
+    this->addToVector(normal);
+
 }
 
 std::vector<GLfloat> VoronoiEdge::getVertexData(){

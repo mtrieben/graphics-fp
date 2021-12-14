@@ -128,17 +128,21 @@ void plotLine(int x0, int y0, int x1, int y1, Canvas2D *canvas) {
     }
 }
 
+void Canvas2D::setEdges(std::vector<float> e){
+    m_edges = e;
+}
+
 void Canvas2D::mouseDown(int x, int y) {
 
     // You're going to need to leave the alpha value on the canvas itself at 255, but you will
     // need to use the actual alpha value to compute the new color of the pixel
 
     std::cout << "Canvas2d::mouseDown() called" << x << y << std::endl;
-    std::vector<float> edges = Voronoi_Main::main();
+    //std::vector<float> edges = Voronoi_Main::main();
 
-    for (int i = 0; i < edges.size(); i += 4) {
-        std::cout << (int) edges[i] << ", " << (int) edges[i+1] << ", " << (int) edges[i+2] << ", " << (int) edges[i+3] << std::endl;
-        plotLine((int) edges[i], (int) edges[i+1], (int) edges[i+2], (int) edges[i+3], this);
+    for (int i = 0; i < m_edges.size(); i += 4) {
+      //  std::cout << (int) m_edges[i] << ", " << (int) m_edges[i+1] << ", " << (int) m_edges[i+2] << ", " << (int) m_edges[i+3] << std::endl;
+        plotLine((int) m_edges[i], (int) m_edges[i+1], (int) m_edges[i+2], (int) m_edges[i+3], this);
     }
 }
 
