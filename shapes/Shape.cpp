@@ -23,6 +23,11 @@ void Shape::addToVector(glm::vec3 vec){
     m_vertexData.push_back(vec[2]);
 }
 
+void Shape::addToVector(glm::vec2 vec){
+    m_vertexData.push_back(vec[0]);
+    m_vertexData.push_back(vec[1]);
+}
+
 // Method used in finding t for implicit intersection
 float Shape::quadratic(float a, float b, float c, int sign){
     if((b*b)-(4.f*a*c) < 0){

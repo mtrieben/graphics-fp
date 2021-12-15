@@ -57,8 +57,12 @@ void Cube::generateFace(int index1, int index2, int index3, int sign){
 
                 // Add normal to m_vertexData
                 glm::vec3 n_temp = glm::vec3(0);
+                glm::vec2 uv = glm::vec2(0);
                 n_temp[index3] = 1*sign;
                 addToVector(n_temp);
+                addToVector(uv);
+
+
             }
         }
     }

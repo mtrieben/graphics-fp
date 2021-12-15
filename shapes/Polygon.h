@@ -16,6 +16,7 @@ protected:
     void generateVertices(float x0, float y0, float x1, float y1, int width);
     void generatePoints(std::vector<glm::vec3> base1, std::vector<glm::vec3> base2, int m_param2, float y);
     void addToVector(glm::vec3 vec);
+    void addToVector(glm::vec2 vec);
     glm::vec3 surfaceNormal(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3);
     std::vector<GLfloat> m_vertexData;
 

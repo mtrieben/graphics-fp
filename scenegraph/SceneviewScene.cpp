@@ -13,6 +13,10 @@
 #include "shapes/Sphere.h"
 #include "shapes/Cube.h"
 #include "shapes/VoronoiEdge.h"
+#include "gl/textures/TextureParametersBuilder.h"
+#include "gl/textures/TextureParameters.h"
+#include "gl/textures/Texture2D.h"
+
 using namespace CS123::GL;
 
 
@@ -27,10 +31,20 @@ SceneviewScene::SceneviewScene():
     loadNormalsShader();
     loadNormalsArrowShader();
     initializeEdgeMaterial();
+    initializeImage();
 }
 
 SceneviewScene::~SceneviewScene()
 {
+}
+
+void SceneviewScene::initializeImage(){
+    QString filepath = QString::fromStdString("/Users/marinatriebenbacher/Desktop/buildingImage.png");
+    std::unique_ptr<QImage> image = std::make_unique<QImage>(filepath);
+    m_image = image.operator*();
+    m_image = QGLWidget::convertToGLFormat(m_image);
+    std::cout << m_image.width() << " " << m_image.height() << std::endl;
+
 }
 
 void SceneviewScene::initializeEdgeMaterial(){
@@ -117,6 +131,7 @@ void SceneviewScene::setSceneUniforms(SupportCanvas3D *context) {
     m_phongShader->setUniform("isShapeScene", false);
     m_phongShader->setUniform("p" , camera->getProjectionMatrix());
     m_phongShader->setUniform("v", camera->getViewMatrix());
+
 }
 
 void SceneviewScene::setMatrixUniforms(Shader *shader, SupportCanvas3D *context) {
@@ -192,17 +207,29 @@ void SceneviewScene::renderGeometry() {
             }
             m_primShapes[i].data = shape->getVertexData();
         }
+        m_phongShader->setUniform("useTexture", false);
         m_phongShader->applyMaterial(m_primatives[i]->primative.material);
         m_phongShader->setUniform("m", m_primatives[i]->transformation);
         m_shape->setVertexData(m_primShapes[i].data);
         m_shape->draw();
     }
     for(int i = 0; i < m_edges.size(); i++){
+        m_phongShader->setUniform("useTexture", false);
         m_phongShader->applyMaterial(m_edgeMaterial);
         m_phongShader->setUniform("m", glm::mat4x4());
         m_shape->setVertexData(m_edges[i].getVertexData());
         m_shape->draw();
     }
+    m_phongShader->setUniform("useTexture", false);
+    //m_phongShader->setUniform("repeatUV", 1.f);
+    std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image.bits(), m_image.width(), m_image.height(), GL_FLOAT);
+
+    std::unique_ptr<TextureParametersBuilder> tpb = std::make_unique<TextureParametersBuilder>();
+    TextureParameters tp = tpb->build();
+
+    tp.applyTo(t2d.operator*());
+    m_phongShader->setTexture("texture", t2d.operator*());
+   // m_phongShader->setUniform("repeatUV", true);
     for(int i = 0; i < m_buildings.size(); i++){
         m_phongShader->applyMaterial(m_edgeMaterial);
         m_phongShader->setUniform("m", glm::mat4x4());

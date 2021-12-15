@@ -63,33 +63,46 @@ void VoronoiEdge::generateVertices(float x0, float y0, float x1, float y1, int w
   //  std::cout << left0[0] << ", " << left0[1] << ", " << left1[0] << ", " << left1[1] << std::endl;
 
     glm::vec3 normal = glm::vec3(0,0,1);
+    glm::vec2 uv = glm::vec2(0.f,0.f);
     this->addToVector(left0);
     this->addToVector(normal);
+    this->addToVector(uv);
     this->addToVector(right1);
     this->addToVector(normal);
+    this->addToVector(uv);
     this->addToVector(left1);
     this->addToVector(normal);
+    this->addToVector(uv);
 
     this->addToVector(left0);
     this->addToVector(normal);
+    this->addToVector(uv);
     this->addToVector(right0);
     this->addToVector(normal);
+    this->addToVector(uv);
     this->addToVector(right1);
     this->addToVector(normal);
+    this->addToVector(uv);
 
     this->addToVector(left0);
     this->addToVector(normal);
+    this->addToVector(uv);
     this->addToVector(left1);
     this->addToVector(normal);
+    this->addToVector(uv);
     this->addToVector(right1);
     this->addToVector(normal);
+    this->addToVector(uv);
 
     this->addToVector(left0);
     this->addToVector(normal);
+    this->addToVector(uv);
     this->addToVector(right1);
     this->addToVector(normal);
+    this->addToVector(uv);
     this->addToVector(right0);
     this->addToVector(normal);
+    this->addToVector(uv);
 
 }
 
@@ -101,4 +114,9 @@ void VoronoiEdge::addToVector(glm::vec3 vec){
     m_vertexData.push_back(vec[0]);
     m_vertexData.push_back(vec[1]);
     m_vertexData.push_back(vec[2]);
+}
+
+void VoronoiEdge::addToVector(glm::vec2 vec){
+    m_vertexData.push_back(vec[0]);
+    m_vertexData.push_back(vec[1]);
 }

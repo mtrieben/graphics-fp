@@ -29,6 +29,7 @@ public:
     std::vector<GLfloat> getVertexData();
 protected:
     void addToVector(glm::vec3 vec);
+    void addToVector(glm::vec2 vec);
     static float quadratic(float a, float b, float c, int sign);
     static float capIntersection(glm::vec3 norm, glm::vec3 coord, glm::vec3 d, glm::vec3 p);
 };

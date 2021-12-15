@@ -14,6 +14,7 @@ public:
 protected:
     void generateVertices(float x0, float y0, float x1, float y1, int width);
     void addToVector(glm::vec3 vec);
+    void addToVector(glm::vec2 vec);
     std::vector<GLfloat> m_vertexData;
 
 };

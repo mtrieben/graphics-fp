@@ -68,6 +68,7 @@ private:
     void setLights();
     void renderGeometry();
     void initializeEdgeMaterial();
+    void initializeImage();
 
     std::unique_ptr<CS123::GL::CS123Shader> m_phongShader;
     std::unique_ptr<CS123::GL::Shader> m_wireframeShader;
@@ -83,6 +84,7 @@ private:
     std::vector<VoronoiEdge> m_edges;
     std::vector<Polygon> m_buildings;
     CS123SceneMaterial m_edgeMaterial;
+    QImage m_image;
 
 };
 
