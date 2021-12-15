@@ -39,6 +39,7 @@ SOURCES += \
     shapes/Cylinder.cpp \
     shapes/ExampleShape.cpp \
     shapes/OpenGLShape.cpp \
+    shapes/Polygon.cpp \
     shapes/Shape.cpp \
     shapes/Sphere.cpp \
     shapes/VoronoiEdge.cpp \
@@ -72,6 +73,7 @@ SOURCES += \
     voronoi/Datastruct/DCEL.cpp \
     voronoi/Math/Circle.cpp \
     voronoi/Math/Parabola.cpp \
+    voronoi/PerlinNoise.cpp \
     voronoi/Types/Point2D.cpp \
     voronoi/Voronoi/VoronoiDiagram.cpp \
     voronoi/Voronoi_Main.cpp
@@ -95,6 +97,7 @@ HEADERS += \
     shapes/Cylinder.h \
     shapes/ExampleShape.h \
     shapes/OpenGLShape.h \
+    shapes/Polygon.h \
     shapes/Shape.h \
     shapes/Sphere.h \
     shapes/VoronoiEdge.h \
@@ -131,6 +134,7 @@ HEADERS += \
     voronoi/Datastruct/DCEL.h \
     voronoi/Math/Circle.h \
     voronoi/Math/Parabola.h \
+    voronoi/PerlinNoise.h \
     voronoi/Types/Point2D.h \
     voronoi/Voronoi/VoronoiDiagram.h \
     voronoi/Voronoi_Main.h

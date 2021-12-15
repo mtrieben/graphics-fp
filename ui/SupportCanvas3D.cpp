@@ -150,6 +150,10 @@ void SupportCanvas3D::addEdge(VoronoiEdge edge){
     m_sceneviewScene->addEdge(edge);
 }
 
+void SupportCanvas3D::addBuilding(Polygon building){
+    m_sceneviewScene->addBuilding(building);
+}
+
 void SupportCanvas3D::setSceneToSceneview() {
     assert(m_sceneviewScene.get());
     m_currentScene = m_sceneviewScene.get();

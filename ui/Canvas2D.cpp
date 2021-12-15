@@ -22,6 +22,7 @@
 #include <QPainter>
 
 #include "voronoi/Voronoi_Main.h"
+#include "voronoi/PerlinNoise.h"
 
 Canvas2D::Canvas2D() :
     m_rayScene(nullptr)
@@ -148,11 +149,12 @@ void Canvas2D::mouseDown(int x, int y) {
     std::cout << "Canvas2d::mouseDown() called" << std::endl;
   //  std::vector<std::vector<std::vector<float>>> edges = Voronoi_Main::main();
     RGBA color = RGBA{255, 255, 255};
-
+    std::unique_ptr<PerlinNoise> perlin = std::make_unique<PerlinNoise>();
     for (int set = 0; set < m_edges.size(); set++) {
         if (set == m_edges.size() - 1) color = RGBA{255, 0, 0};
         for (int i = 0; i < m_edges[set].size(); i+=2) {
             plotLine((int) m_edges[set][i][0], (int) m_edges[set][i][1], (int) m_edges[set][i+1][0], (int) m_edges[set][i+1][1], this, color);
+            std::cout << perlin->perlin(m_edges[set][i][0], m_edges[set][i][1], 0.f) << std::endl;
         }
     }
 

@@ -51,12 +51,16 @@ void VoronoiEdge::generateVertices(float x0, float y0, float x1, float y1, int w
             left1 = end + (width/2.f)*v;
         }
     }
+    float z = 0.001f;
+    if (width > 2){
+        z = 0.002f;
+    }
 
-    left0[2] = 0.001f;
-    right0[2] = 0.001f;
-    left1[2] = 0.001f;
-    right1[2] = 0.001f;
-    std::cout << left0[0] << ", " << left0[1] << ", " << left1[0] << ", " << left1[1] << std::endl;
+    left0[2] = z;
+    right0[2] = z;
+    left1[2] = z;
+    right1[2] = z;
+  //  std::cout << left0[0] << ", " << left0[1] << ", " << left1[0] << ", " << left1[1] << std::endl;
 
     glm::vec3 normal = glm::vec3(0,0,1);
     this->addToVector(left0);

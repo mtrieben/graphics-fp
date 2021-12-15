@@ -340,6 +340,11 @@ void MainWindow::fileOpen() {
                         m_canvas3D->addEdge(edge.operator*());
                     }
                 }
+                std::unique_ptr<Polygon> buildling = std::make_unique<Polygon>(glm::vec2(-1.f, -1.f), glm::vec2(1.f, -1.f), glm::vec2(1.5f,.5f), glm::vec2(0.f,1.f), glm::vec2(-1.5f, .5f), 2.f);
+                m_canvas3D->addBuilding(buildling.operator*());
+
+                std::unique_ptr<Polygon> buildling1 = std::make_unique<Polygon>(glm::vec2(-10.f, -10.f), glm::vec2(-9.f,-9.f), glm::vec2(-10.f, -9.f), 2.f);
+                m_canvas3D->addBuilding(buildling1.operator*());
 
 
                 //

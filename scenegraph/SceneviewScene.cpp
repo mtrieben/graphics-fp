@@ -52,6 +52,10 @@ void SceneviewScene::addEdge(VoronoiEdge edge){
     m_edges.push_back(edge);
 }
 
+void SceneviewScene::addBuilding(Polygon building){
+    m_buildings.push_back(building);
+}
+
 void SceneviewScene::loadPhongShader() {
     std::string vertexSource = ResourceLoader::loadResourceFileToString(":/shaders/default.vert");
     std::string fragmentSource = ResourceLoader::loadResourceFileToString(":/shaders/default.frag");
@@ -197,6 +201,12 @@ void SceneviewScene::renderGeometry() {
         m_phongShader->applyMaterial(m_edgeMaterial);
         m_phongShader->setUniform("m", glm::mat4x4());
         m_shape->setVertexData(m_edges[i].getVertexData());
+        m_shape->draw();
+    }
+    for(int i = 0; i < m_buildings.size(); i++){
+        m_phongShader->applyMaterial(m_edgeMaterial);
+        m_phongShader->setUniform("m", glm::mat4x4());
+        m_shape->setVertexData(m_buildings[i].getVertexData());
         m_shape->draw();
     }
     m_tesselate = false;

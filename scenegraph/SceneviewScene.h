@@ -4,6 +4,7 @@
 #include "OpenGLScene.h"
 #include "shapes/Shape.h"
 #include "shapes/VoronoiEdge.h"
+#include "shapes/Polygon.h"
 
 
 #include <memory>
@@ -49,6 +50,7 @@ public:
     // pointer.  This will be used during the "modeler" lab, so don't worry about it for now.
     void setSelection(int x, int y);
     void addEdge(VoronoiEdge edge);
+    void addBuilding(Polygon building);
 
 private:
 
@@ -79,6 +81,7 @@ private:
     std::unique_ptr<Shape> m_shape;
     std::vector<PrimShape> m_primShapes;
     std::vector<VoronoiEdge> m_edges;
+    std::vector<Polygon> m_buildings;
     CS123SceneMaterial m_edgeMaterial;
 
 };

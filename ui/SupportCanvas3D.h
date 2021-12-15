@@ -3,6 +3,7 @@
 
 #include <memory>
 #include "shapes/VoronoiEdge.h"
+#include "shapes/Polygon.h"
 
 #include "GL/glew.h"
 #include <QGLWidget>
@@ -72,6 +73,7 @@ public slots:
     void updateCameraRotationN();
     void updateCameraClip();
     void addEdge(VoronoiEdge edge);
+    void addBuilding(Polygon building);
 
 signals:
     void aspectRatioChanged();
