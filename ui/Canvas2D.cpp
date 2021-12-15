@@ -132,6 +132,10 @@ void Canvas2D::setEdges(std::vector<std::vector<std::vector<float>>> e){
     m_edges = e;
 }
 
+void Canvas2D::setVoronoi(Voronoi_Main voronoi){
+    m_voronoi = voronoi;
+}
+
 void Canvas2D::mouseDown(int x, int y) {
 
     // You're going to need to leave the alpha value on the canvas itself at 255, but you will

@@ -8,7 +8,6 @@
 #include "scenegraph/SceneviewScene.h"
 #include "camera/CamtransCamera.h"
 #include "CS123XmlSceneParser.h"
-#include "voronoi/Voronoi_Main.h"
 #include <math.h>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -108,7 +107,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->setCurrentWidget(widget);
     show();
 
-    m_edges = Voronoi_Main::main();
+    m_voronoi = std::make_unique<Voronoi_Main>();
+    m_edges = m_voronoi->main();
+    ui->canvas2D->setVoronoi(*m_voronoi);
     ui->canvas2D->setEdges(m_edges);
     ui->canvas2D->resize(200,200);
 }
