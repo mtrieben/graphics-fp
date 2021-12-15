@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "SupportCanvas2D.h"
+#include "voronoi/Voronoi_Main.h"
 
 class RayScene;
 
@@ -31,6 +32,7 @@ public:
 
     QImage* getImage() { return m_image; }
     void setEdges(std::vector<std::vector<std::vector<float>>> e);
+    void setVoronoi(Voronoi_Main voronoi);
 
 
 public slots:
@@ -54,6 +56,7 @@ protected:
 private:
 
     std::unique_ptr<RayScene> m_rayScene;
+    Voronoi_Main m_voronoi;
     std::vector<std::vector<std::vector<float>>> m_edges;
 
 };

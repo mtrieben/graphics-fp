@@ -14,13 +14,8 @@ Voronoi_Main::Voronoi_Main()
 
 #include "Types/Point2D.h"
 #include "Voronoi/VoronoiDiagram.h"
-#include "Datastruct/Beachline.h"
-
-
-//#include "matplotlibcpp.h"
 
 namespace bl = beachline;
-//namespace plt = matplotlibcpp;
 
 std::vector<double> get_coordinate(const std::vector<Point2D> &points, int coord_id) {
     std::vector<double> c(points.size(), 0.0);
@@ -155,10 +150,10 @@ void initEdgePointsVis(bl::HalfEdgePtr h, std::vector<double> &x, std::vector<do
 }
 
 std::vector<float> getBounds(std::vector<std::vector<float>> face_points) {
-    float minX = INFINITY;
-    float maxX = -INFINITY;
-    float minY = INFINITY;
-    float maxY = -INFINITY;
+    float minX = 1000000;
+    float maxX = -1000000;
+    float minY = 1000000;
+    float maxY = -1000000;
 
     for(int i = 0; i < face_points.size(); i++) {
         if (face_points[i][0] < minX) {
@@ -221,12 +216,6 @@ bool pointInPolygon(float x, float y, std::vector<std::vector<float>> face_point
     do {
         int next = (i+1) % face_points.size();
 
-//        std::cout << "p1: " << face_points[i][0] << ", " << face_points[i][1]
-//                  << " q1: " << face_points[next][0] << ", " << face_points[next][1]
-//                  << " p2: " << x << ", " << y
-//                  << " q2: " << endPoint[0] << ", " << endPoint[1]<< std::endl;
-//        std::cout << linesIntersect(face_points[i], face_points[next], {x, y}, endPoint) << std::endl;
-
         if (linesIntersect(face_points[i], face_points[next], {x, y}, endPoint)) {
             if (orientationOrCollinear(face_points[i], {x, y}, face_points[next]) == 0) {
                 return collinearAndOnSegment(face_points[i], {x, y}, face_points[next]);
@@ -261,11 +250,14 @@ std::vector<float> bindPointSpecialCase(std::vector<float> source, std::vector<f
     float uLength = sqrt(u[0] * u[0] + u[1] * u[1]);
     u[0] /= uLength;
     u[1] /= uLength;
+    float dist = uLength;
 
     while (!pointInPolygon(boundPoint[0], boundPoint[1], face_points)) {
-        if (abs(target[0] - boundPoint[0]) < 2) return {};
         boundPoint[0] += u[0];
         boundPoint[1] += u[1];
+        float newDist = sqrt((target[0] - boundPoint[0]) * (target[0] - boundPoint[0]) + (target[1] - boundPoint[1]) * (target[1] - boundPoint[1]));
+        if (newDist <= 1.1f || newDist >= dist || newDist > 1000000) return {};
+        dist = newDist;
     }
 
     return boundPoint;
@@ -300,7 +292,7 @@ std::vector<std::vector<float>> boundRoad(std::vector<float> p1, std::vector<flo
 std::vector<std::vector<float>> boundToCanvas(std::vector<std::vector<float>> points, std::vector<std::vector<float>> corners) {
     std::vector<std::vector<float>> boundResult;
 
-    for (int i = 0; i < points.size(); i+=2) {
+    for (int i = 0; i < points.size() - 1; i+=2) {
         std::vector<std::vector<float>> boundedRoad = boundRoad(points[i], points[i+1], corners);
         if(boundedRoad.size() == 2) {
             boundResult.push_back(boundedRoad[0]);
@@ -311,15 +303,71 @@ std::vector<std::vector<float>> boundToCanvas(std::vector<std::vector<float>> po
     return boundResult;
 }
 
-std::vector<std::vector<float>> generateSecondaryRoads(std::vector<std::vector<float>> face_points) {
+std::vector<std::vector<float>> scalePolygon(std::vector<std::vector<float>> face_points, float thickness) {
+    std::vector<std::vector<std::vector<float>>> lines;
+    std::vector<std::vector<float>> new_points;
+    float y_inverse, x_inverse;
+
+    int i = 0;
+    do {
+        int next = (i+1) % face_points.size();
+
+        float slope = (face_points[next][1] - face_points[i][1]) / (face_points[next][0] - face_points[i][0]);
+        if (slope <= 0.005f && slope >= -0.005f){
+            y_inverse = 1;
+            x_inverse = 0;
+        } else {
+            y_inverse = (-1.f / slope) / sqrt((-1.f / slope) * (-1.f / slope) + 1);
+            x_inverse = 1 / sqrt((-1.f / slope) * (-1.f / slope) + 1);
+        }
+
+        if(pointInPolygon(((face_points[next][0] + face_points[i][0]) / 2) + 5 * x_inverse, ((face_points[next][1] + face_points[i][1]) / 2) + 5 * y_inverse, face_points)) {
+            lines.push_back({{face_points[i][0] + thickness * x_inverse, face_points[i][1] + thickness * y_inverse}, {face_points[next][0] + thickness * x_inverse, face_points[next][1] + thickness * y_inverse}});
+        } else {
+            lines.push_back({{face_points[i][0] - thickness * x_inverse, face_points[i][1] - thickness * y_inverse}, {face_points[next][0] - thickness * x_inverse, face_points[next][1] - thickness * y_inverse}});
+        }
+
+        i = next;
+    } while (i != 0);
+
+    i = 0;
+    do {
+        int next = (i+1) % face_points.size();
+
+        float a1 = lines[i][1][1] - lines[i][0][1];
+        float b1 = lines[i][0][0] - lines[i][1][0];
+        float c1 = a1*(lines[i][0][0]) + b1*(lines[i][0][1]);
+
+        float a2 = lines[next][1][1] - lines[next][0][1];
+        float b2 = lines[next][0][0] - lines[next][1][0];
+        float c2 = a2*(lines[next][0][0])+ b2*(lines[next][0][1]);
+
+        float determinant = a1*b2 - a2*b1;
+
+        new_points.push_back({(b2*c1 - b1*c2)/determinant, (a1*c2 - a2*c1)/determinant});
+
+        i = next;
+    } while (i != 0);
+
+    return new_points;
+}
+
+std::vector<std::vector<float>> Voronoi_Main::generateSecondaryRoads(std::vector<std::vector<float>> face_points, int dist) {
     std::vector<Point2D> pointSet;
     std::vector<std::vector<float>> res = {};
     std::vector<float> topLeftBottomRight = getBounds(face_points);
 
-    for (float x = std::max(topLeftBottomRight[0] + 5.f, 0.f); x < std::min(topLeftBottomRight[2] - 5.f, 200.f); x += 15) {
-        for (float y = std::max(topLeftBottomRight[1] + 5.f, 0.f); y < std::min(topLeftBottomRight[3] - 5.f, 200.f); y += 15) {
+    for (float x = std::max(topLeftBottomRight[0] + 5.f, 0.f); x < std::min(topLeftBottomRight[2] - 5.f, 200.f); x += dist) {
+        for (float y = std::max(topLeftBottomRight[1] + 5.f, 0.f); y < std::min(topLeftBottomRight[3] - 5.f, 200.f); y += dist) {
             if (pointInPolygon(x, y, face_points)) {
                 pointSet.push_back(Point2D(x, y));
+//                for(float xX = x - 2; xX <= x + 2; xX+=2) {
+//                    for(float yY = y - 2; yY <= y + 2; yY+=2) {
+//                        if (pointInPolygon(xX, yY, scalePolygon(face_points, 5))) {
+//                            m_buildy_points.push_back({xX, yY});
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -330,40 +378,103 @@ std::vector<std::vector<float>> generateSecondaryRoads(std::vector<std::vector<f
     // Construct Voronoi diagram
     VoronoiDiagram::build_voronoi(pointSet, halfedges, vertices, faces);
 
-    for (size_t i = 0; i < halfedges.size(); ++i) {
-        bl::HalfEdgePtr h = halfedges[i];
-        std::vector<double> x(2, 0.0), y(2, 0.0);
-        initEdgePointsVis(h, x, y, pointSet);
+    for (int counter = 0; counter < faces.size(); counter++) {
+        std::vector<std::vector<float>> block_points;
+        bl::HalfEdgePtr he_end = faces[counter], he = he_end;
+        if (he != nullptr) {
+            do {
+                std::vector<double> x(2, 0.0), y(2, 0.0);
+                initEdgePointsVis(he, x, y, pointSet);
 
-        std::vector<float> p1;
-        p1.push_back(x[0]);
-        p1.push_back(y[0]);
-        std::vector<float> p2;
-        p2.push_back(x[1]);
-        p2.push_back(y[1]);
-        std::vector<std::vector<float>> boundedPoints = boundRoad(p1, p2, face_points);
-        if(boundedPoints.size() == 2) {
-            res.push_back(boundedPoints[0]);
-            res.push_back(boundedPoints[1]);
+                std::vector<float> p1;
+                p1.push_back(x[0]);
+                p1.push_back(y[0]);
+
+                std::vector<float> p2;
+                p2.push_back(x[1]);
+                p2.push_back(y[1]);
+//                std::cout << p1[0] << ", " << p1[1] << " " << p2[0] << ", " << p2[1] << " " << std::endl;
+
+                std::vector<std::vector<float>> boundedPoints = boundRoad(p1, p2, scalePolygon(face_points, 2.5));
+
+                if(boundedPoints.size() == 2) {
+                    bool p1seen = false;
+                    bool p2seen = false;
+                    for (int pIndex = 0; pIndex < block_points.size(); pIndex++) {
+                        if (abs(block_points[pIndex][0] - boundedPoints[0][0]) < 0.05 && abs(block_points[pIndex][1] - boundedPoints[0][1]) < 0.05) {
+                            p1seen = true;
+                        }
+                        if (abs(block_points[pIndex][0] - boundedPoints[1][0]) < 0.05 && abs(block_points[pIndex][1] - boundedPoints[1][1]) < 0.05) {
+                            p2seen = true;
+                        }
+                    }
+
+                    res.push_back(boundedPoints[0]);
+                    res.push_back(boundedPoints[1]);
+
+                    if (!p2seen) {
+                        block_points.push_back(boundedPoints[1]);
+                    }
+
+                    if (!p1seen) {
+                        block_points.push_back(boundedPoints[0]);
+                    }
+                }
+
+                he = he->next;
+            } while (he != nullptr && he != he_end);
         }
+
+        for (int i = 0; i < block_points.size(); i++) {
+//            std::cout << "pt " << i << ": " << block_points[i][0] << ", " << block_points[i][1] << " ";
+        }
+//        std::cout << std::endl;
+
+        block_points = scalePolygon(block_points, 2);
+        for (int i = 0; i < block_points.size(); i++) {
+//            std::cout << "scaled pt " << i << ": " << block_points[i][0] << ", " << block_points[i][1] << " ";
+        }
+//        std::cout << std::endl;
+        std::vector<float> block_topLeftBottomRight = getBounds(block_points);
+        block_topLeftBottomRight[0] = std::max(block_topLeftBottomRight[0] + 2.f, 1.f);
+        block_topLeftBottomRight[1] = std::max(block_topLeftBottomRight[1] + 2.f, 1.f);
+        block_topLeftBottomRight[2] = std::min(block_topLeftBottomRight[2] - 2.f, 199.f);
+        block_topLeftBottomRight[3] = std::min(block_topLeftBottomRight[3] - 2.f, 199.f);
+//        std::cout << "top left: " << block_topLeftBottomRight[0] << ", " << block_topLeftBottomRight[1] << ", bottom right: " << block_topLeftBottomRight[2] << ", " << block_topLeftBottomRight[3] << std::endl;
+
+        for (float x = block_topLeftBottomRight[0]; x <= block_topLeftBottomRight[2]; x += 3.5) {
+            for (float y = block_topLeftBottomRight[1]; y <= block_topLeftBottomRight[3]; y += 3.5) {
+                if (pointInPolygon(x, y, block_points) && pointInPolygon(x, y, face_points)) {
+                    m_buildy_points.push_back({{x, y}});
+                }
+            }
+        }
+    }
+
+    for (int building = 0; building < m_buildy_points.size(); building++) {
+        std::vector<float> center = m_buildy_points[building][0];
+        m_buildy_points[building].push_back({center[0] - 1, center[1] - 1});
+        m_buildy_points[building].push_back({center[0] - 1, center[1] + 1});
+        m_buildy_points[building].push_back({center[0] + 1, center[1] + 1});
+        m_buildy_points[building].push_back({center[0] + 1, center[1] - 1});
     }
 
     return res;
 }
 
+std::vector<std::vector<std::vector<float>>> Voronoi_Main::getBuildyPoints() {
+    return m_buildy_points;
+}
 
 std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
-    std::vector<std::vector<std::vector<float>>> res;
-    std::vector<std::vector<float>> primary;
-
     // Generate random points
     std::vector<Point2D> points = randomPoint(7);
 
 //    std::vector<Point2D> points = {Point2D(100, 100), Point2D(200, 350), Point2D(350, 100)};
     //std::vector<Point2D> points = readPoints("/Users/dkotsur/Projects/KNU/FortuneAlgo/Data/fail_1.txt");
 
-    std::vector<bl::HalfEdgePtr> halfedges, faces;
-    std::vector<bl::VertexPtr> vertices;
+    std::vector<bl::HalfEdgePtr> m_primaryHalfedges, m_primaryFaces;
+    std::vector<bl::VertexPtr> m_primaryVertices;
 
     for(size_t i = 0; i < points.size(); ++i) {
         std::vector<double> _x, _y;
@@ -371,34 +482,27 @@ std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
     }
 
     // Construct Voronoi diagram
-    VoronoiDiagram::build_voronoi(points, halfedges, vertices, faces);
+    VoronoiDiagram::build_voronoi(points, m_primaryHalfedges, m_primaryVertices, m_primaryFaces);
 
-    for (size_t i = 0; i < halfedges.size(); ++i) {
-        bl::HalfEdgePtr h = halfedges[i];
+    for (size_t i = 0; i < m_primaryHalfedges.size(); ++i) {
+        bl::HalfEdgePtr h = m_primaryHalfedges[i];
         std::vector<double> x(2, 0.0), y(2, 0.0);
         initEdgePointsVis(h, x, y, points);
-
-//        res.push_back(x[0]);
-//        res.push_back(y[0]);
-//        res.push_back(x[1]);
-//        res.push_back(y[1]);
-
-//        plt::plot(x, y, "lightgray");
     }
 
     // Check if iterator works fine
-    for (size_t i = 0; i < halfedges.size(); ++i) {
-        bl::HalfEdgePtr h = halfedges[i];
+    for (size_t i = 0; i < m_primaryHalfedges.size(); ++i) {
+        bl::HalfEdgePtr h = m_primaryHalfedges[i];
         do {
-            assert(halfedges[i]->l_index == h->l_index);
+            assert(m_primaryHalfedges[i]->l_index == h->l_index);
             h = h->next;
-        } while (h != nullptr && h != halfedges[i]);
+        } while (h != nullptr && h != m_primaryHalfedges[i]);
     }
 
     /**
      Iterate around the vertex CCW
      */
-    bl::HalfEdgePtr he_end = halfedges[6], he = he_end;
+    bl::HalfEdgePtr he_end = m_primaryHalfedges[6], he = he_end;
 //    if (he->vertex != nullptr) {
 //        do {
 //            std::vector<double> x(2, 0.0), y(2, 0.0);
@@ -414,9 +518,9 @@ std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
     /**
      Iterate around the point CCW
      */
-    for (int counter = 0; counter < faces.size(); counter++) {
+    for (int counter = 0; counter < m_primaryFaces.size(); counter++) {
         std::vector<std::vector<float>> face_points;
-        he_end = faces[counter]; he = he_end;
+        he_end = m_primaryFaces[counter]; he = he_end;
         if (he != nullptr) {
             do {
                 std::vector<double> x(2, 0.0), y(2, 0.0);
@@ -425,10 +529,10 @@ std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
                 bool p1seen = false;
                 bool p2seen = false;
                 for (int pIndex = 0; pIndex < face_points.size(); pIndex++) {
-                    if (abs(face_points[pIndex][0] - x[0]) < 0.5 && abs(face_points[pIndex][1] - y[0]) < 0.5) {
+                    if (abs(face_points[pIndex][0] - x[0]) < 0.05 && abs(face_points[pIndex][1] - y[0]) < 0.05) {
                         p1seen = true;
                     }
-                    if (abs(face_points[pIndex][0] - x[1]) < 0.5 && abs(face_points[pIndex][1] - y[1]) < 0.5) {
+                    if (abs(face_points[pIndex][0] - x[1]) < 0.05 && abs(face_points[pIndex][1] - y[1]) < 0.05) {
                         p2seen = true;
                     }
                 }
@@ -436,35 +540,34 @@ std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
                 std::vector<float> p1;
                 p1.push_back(x[0]);
                 p1.push_back(y[0]);
-                primary.push_back(p1);
+                m_primaryRoads.push_back(p1);
 
                 std::vector<float> p2;
                 p2.push_back(x[1]);
                 p2.push_back(y[1]);
-                primary.push_back(p2);
+                m_primaryRoads.push_back(p2);
 
 
                 if (!p2seen) {
                     face_points.push_back(p2);
-//                    std::cout << x[1] << ", " << y[1] << std::endl;
                 }
 
                 if (!p1seen) {
                     face_points.push_back(p1);
-//                    std::cout << x[0] << ", " << y[0] << std::endl;
                 }
-
-//                std::cout << x[0] << ", " << y[0] << ", " << x[1] << ", " << y[1] << std::endl;
 
                 he = he->next;
             } while (he != nullptr && he != he_end);
         }
 
-        res.push_back(boundToCanvas(generateSecondaryRoads(face_points), canvas_corners));
+        m_secondaryRoads.push_back(boundToCanvas(this->generateSecondaryRoads(face_points, 15), canvas_corners));
+        m_allRoads.push_back(m_secondaryRoads.back());
     }
 
-    res.push_back(boundToCanvas(primary, canvas_corners));
+    m_primaryRoads = boundToCanvas(m_primaryRoads, canvas_corners);
 
-    return res;
+    m_allRoads.push_back(m_primaryRoads);
+
+    return m_allRoads;
 }
 
