@@ -150,10 +150,10 @@ void initEdgePointsVis(bl::HalfEdgePtr h, std::vector<double> &x, std::vector<do
 }
 
 std::vector<float> getBounds(std::vector<std::vector<float>> face_points) {
-    float minX = INFINITY;
-    float maxX = -INFINITY;
-    float minY = INFINITY;
-    float maxY = -INFINITY;
+    float minX = 1000000;
+    float maxX = -1000000;
+    float minY = 1000000;
+    float maxY = -1000000;
 
     for(int i = 0; i < face_points.size(); i++) {
         if (face_points[i][0] < minX) {
@@ -216,12 +216,6 @@ bool pointInPolygon(float x, float y, std::vector<std::vector<float>> face_point
     do {
         int next = (i+1) % face_points.size();
 
-//        std::cout << "p1: " << face_points[i][0] << ", " << face_points[i][1]
-//                  << " q1: " << face_points[next][0] << ", " << face_points[next][1]
-//                  << " p2: " << x << ", " << y
-//                  << " q2: " << endPoint[0] << ", " << endPoint[1]<< std::endl;
-//        std::cout << linesIntersect(face_points[i], face_points[next], {x, y}, endPoint) << std::endl;
-
         if (linesIntersect(face_points[i], face_points[next], {x, y}, endPoint)) {
             if (orientationOrCollinear(face_points[i], {x, y}, face_points[next]) == 0) {
                 return collinearAndOnSegment(face_points[i], {x, y}, face_points[next]);
@@ -259,11 +253,11 @@ std::vector<float> bindPointSpecialCase(std::vector<float> source, std::vector<f
     float dist = uLength;
 
     while (!pointInPolygon(boundPoint[0], boundPoint[1], face_points)) {
+        boundPoint[0] += u[0];
+        boundPoint[1] += u[1];
         float newDist = sqrt((target[0] - boundPoint[0]) * (target[0] - boundPoint[0]) + (target[1] - boundPoint[1]) * (target[1] - boundPoint[1]));
         if (newDist <= 1.1f || newDist >= dist || newDist > 1000000) return {};
         dist = newDist;
-        boundPoint[0] += u[0];
-        boundPoint[1] += u[1];
     }
 
     return boundPoint;
@@ -358,7 +352,7 @@ std::vector<std::vector<float>> scalePolygon(std::vector<std::vector<float>> fac
     return new_points;
 }
 
-std::vector<std::vector<float>> generateSecondaryRoads(std::vector<std::vector<float>> face_points, int dist) {
+std::vector<std::vector<float>> Voronoi_Main::generateSecondaryRoads(std::vector<std::vector<float>> face_points, int dist) {
     std::vector<Point2D> pointSet;
     std::vector<std::vector<float>> res = {};
     std::vector<float> topLeftBottomRight = getBounds(face_points);
@@ -367,6 +361,13 @@ std::vector<std::vector<float>> generateSecondaryRoads(std::vector<std::vector<f
         for (float y = std::max(topLeftBottomRight[1] + 5.f, 0.f); y < std::min(topLeftBottomRight[3] - 5.f, 200.f); y += dist) {
             if (pointInPolygon(x, y, face_points)) {
                 pointSet.push_back(Point2D(x, y));
+//                for(float xX = x - 2; xX <= x + 2; xX+=2) {
+//                    for(float yY = y - 2; yY <= y + 2; yY+=2) {
+//                        if (pointInPolygon(xX, yY, scalePolygon(face_points, 5))) {
+//                            m_buildy_points.push_back({xX, yY});
+//                        }
+//                    }
+//                }
             }
         }
     }
@@ -377,25 +378,92 @@ std::vector<std::vector<float>> generateSecondaryRoads(std::vector<std::vector<f
     // Construct Voronoi diagram
     VoronoiDiagram::build_voronoi(pointSet, halfedges, vertices, faces);
 
-    for (size_t i = 0; i < halfedges.size(); ++i) {
-        bl::HalfEdgePtr h = halfedges[i];
-        std::vector<double> x(2, 0.0), y(2, 0.0);
-        initEdgePointsVis(h, x, y, pointSet);
+    for (int counter = 0; counter < faces.size(); counter++) {
+        std::vector<std::vector<float>> block_points;
+        bl::HalfEdgePtr he_end = faces[counter], he = he_end;
+        if (he != nullptr) {
+            do {
+                std::vector<double> x(2, 0.0), y(2, 0.0);
+                initEdgePointsVis(he, x, y, pointSet);
 
-        std::vector<float> p1;
-        p1.push_back(x[0]);
-        p1.push_back(y[0]);
-        std::vector<float> p2;
-        p2.push_back(x[1]);
-        p2.push_back(y[1]);
-        std::vector<std::vector<float>> boundedPoints = boundRoad(p1, p2, scalePolygon(face_points, 2.5));
-        if(boundedPoints.size() == 2) {
-            res.push_back(boundedPoints[0]);
-            res.push_back(boundedPoints[1]);
+                std::vector<float> p1;
+                p1.push_back(x[0]);
+                p1.push_back(y[0]);
+
+                std::vector<float> p2;
+                p2.push_back(x[1]);
+                p2.push_back(y[1]);
+//                std::cout << p1[0] << ", " << p1[1] << " " << p2[0] << ", " << p2[1] << " " << std::endl;
+
+                std::vector<std::vector<float>> boundedPoints = boundRoad(p1, p2, scalePolygon(face_points, 2.5));
+
+                if(boundedPoints.size() == 2) {
+                    bool p1seen = false;
+                    bool p2seen = false;
+                    for (int pIndex = 0; pIndex < block_points.size(); pIndex++) {
+                        if (abs(block_points[pIndex][0] - boundedPoints[0][0]) < 0.05 && abs(block_points[pIndex][1] - boundedPoints[0][1]) < 0.05) {
+                            p1seen = true;
+                        }
+                        if (abs(block_points[pIndex][0] - boundedPoints[1][0]) < 0.05 && abs(block_points[pIndex][1] - boundedPoints[1][1]) < 0.05) {
+                            p2seen = true;
+                        }
+                    }
+
+                    res.push_back(boundedPoints[0]);
+                    res.push_back(boundedPoints[1]);
+
+                    if (!p2seen) {
+                        block_points.push_back(boundedPoints[1]);
+                    }
+
+                    if (!p1seen) {
+                        block_points.push_back(boundedPoints[0]);
+                    }
+                }
+
+                he = he->next;
+            } while (he != nullptr && he != he_end);
+        }
+
+        for (int i = 0; i < block_points.size(); i++) {
+//            std::cout << "pt " << i << ": " << block_points[i][0] << ", " << block_points[i][1] << " ";
+        }
+//        std::cout << std::endl;
+
+        block_points = scalePolygon(block_points, 2);
+        for (int i = 0; i < block_points.size(); i++) {
+//            std::cout << "scaled pt " << i << ": " << block_points[i][0] << ", " << block_points[i][1] << " ";
+        }
+//        std::cout << std::endl;
+        std::vector<float> block_topLeftBottomRight = getBounds(block_points);
+        block_topLeftBottomRight[0] = std::max(block_topLeftBottomRight[0] + 2.f, 1.f);
+        block_topLeftBottomRight[1] = std::max(block_topLeftBottomRight[1] + 2.f, 1.f);
+        block_topLeftBottomRight[2] = std::min(block_topLeftBottomRight[2] - 2.f, 199.f);
+        block_topLeftBottomRight[3] = std::min(block_topLeftBottomRight[3] - 2.f, 199.f);
+//        std::cout << "top left: " << block_topLeftBottomRight[0] << ", " << block_topLeftBottomRight[1] << ", bottom right: " << block_topLeftBottomRight[2] << ", " << block_topLeftBottomRight[3] << std::endl;
+
+        for (float x = block_topLeftBottomRight[0]; x <= block_topLeftBottomRight[2]; x += 3.5) {
+            for (float y = block_topLeftBottomRight[1]; y <= block_topLeftBottomRight[3]; y += 3.5) {
+                if (pointInPolygon(x, y, block_points) && pointInPolygon(x, y, face_points)) {
+                    m_buildy_points.push_back({{x, y}});
+                }
+            }
         }
     }
 
+    for (int building = 0; building < m_buildy_points.size(); building++) {
+        std::vector<float> center = m_buildy_points[building][0];
+        m_buildy_points[building].push_back({center[0] - 1, center[1] - 1});
+        m_buildy_points[building].push_back({center[0] - 1, center[1] + 1});
+        m_buildy_points[building].push_back({center[0] + 1, center[1] + 1});
+        m_buildy_points[building].push_back({center[0] + 1, center[1] - 1});
+    }
+
     return res;
+}
+
+std::vector<std::vector<std::vector<float>>> Voronoi_Main::getBuildyPoints() {
+    return m_buildy_points;
 }
 
 std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
@@ -461,10 +529,10 @@ std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
                 bool p1seen = false;
                 bool p2seen = false;
                 for (int pIndex = 0; pIndex < face_points.size(); pIndex++) {
-                    if (abs(face_points[pIndex][0] - x[0]) < 0.5 && abs(face_points[pIndex][1] - y[0]) < 0.5) {
+                    if (abs(face_points[pIndex][0] - x[0]) < 0.05 && abs(face_points[pIndex][1] - y[0]) < 0.05) {
                         p1seen = true;
                     }
-                    if (abs(face_points[pIndex][0] - x[1]) < 0.5 && abs(face_points[pIndex][1] - y[1]) < 0.5) {
+                    if (abs(face_points[pIndex][0] - x[1]) < 0.05 && abs(face_points[pIndex][1] - y[1]) < 0.05) {
                         p2seen = true;
                     }
                 }
@@ -482,21 +550,17 @@ std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
 
                 if (!p2seen) {
                     face_points.push_back(p2);
-//                    std::cout << x[1] << ", " << y[1] << std::endl;
                 }
 
                 if (!p1seen) {
                     face_points.push_back(p1);
-//                    std::cout << x[0] << ", " << y[0] << std::endl;
                 }
-
-//                std::cout << x[0] << ", " << y[0] << ", " << x[1] << ", " << y[1] << std::endl;
 
                 he = he->next;
             } while (he != nullptr && he != he_end);
         }
 
-        m_secondaryRoads.push_back(boundToCanvas(generateSecondaryRoads(face_points, 15), canvas_corners));
+        m_secondaryRoads.push_back(boundToCanvas(this->generateSecondaryRoads(face_points, 15), canvas_corners));
         m_allRoads.push_back(m_secondaryRoads.back());
     }
 

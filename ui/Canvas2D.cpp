@@ -141,22 +141,23 @@ void Canvas2D::mouseDown(int x, int y) {
     // You're going to need to leave the alpha value on the canvas itself at 255, but you will
     // need to use the actual alpha value to compute the new color of the pixel
 
-
-//    std::cout << "Canvas2d::mouseDown() called" << x << y << std::endl;
-//    //std::vector<float> edges = Voronoi_Main::main();
-
-//    for (int i = 0; i < m_edges.size(); i += 4) {
-//      //  std::cout << (int) m_edges[i] << ", " << (int) m_edges[i+1] << ", " << (int) m_edges[i+2] << ", " << (int) m_edges[i+3] << std::endl;
-//        plotLine((int) m_edges[i], (int) m_edges[i+1], (int) m_edges[i+2], (int) m_edges[i+3], this);
-
     std::cout << "Canvas2d::mouseDown() called" << std::endl;
-  //  std::vector<std::vector<std::vector<float>>> edges = Voronoi_Main::main();
     RGBA color = RGBA{255, 255, 255};
 
     for (int set = 0; set < m_edges.size(); set++) {
         if (set == m_edges.size() - 1) color = RGBA{255, 0, 0};
         for (int i = 0; i < m_edges[set].size(); i+=2) {
-            plotLine((int) m_edges[set][i][0], (int) m_edges[set][i][1], (int) m_edges[set][i+1][0], (int) m_edges[set][i+1][1], this, color);
+            plotLine((int) m_edges[set][i][0] * 3, (int) m_edges[set][i][1] * 3, (int) m_edges[set][i+1][0] * 3, (int) m_edges[set][i+1][1] * 3, this, color);
+        }
+    }
+
+    std::vector<std::vector<std::vector<float>>> pts = m_voronoi.getBuildyPoints();
+
+    for (int building = 0; building < pts.size(); building++) {
+        for (int i = 0; i < pts[building].size(); i++) {
+            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].r = 255.f;
+            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].g = 255.f;
+            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].b = 255.f;
         }
     }
 

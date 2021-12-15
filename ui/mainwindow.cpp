@@ -111,7 +111,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_edges = m_voronoi->main();
     ui->canvas2D->setVoronoi(*m_voronoi);
     ui->canvas2D->setEdges(m_edges);
-    ui->canvas2D->resize(200,200);
+    ui->canvas2D->resize(600,600);
 }
 
 MainWindow::~MainWindow()
