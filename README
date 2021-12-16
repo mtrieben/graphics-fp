@@ -24,7 +24,7 @@ Because our shapes are so large, the cameras we use in the class struggle to han
 We must zoom out a lot in order to see the shapes. We would work on making the cameras easier to maneuver and make the movement smoother (we have a ton of tessellated triangles).
 
 REFERENCES
-We could not have implemented this project without referencing some pseudocode for complex algorithms.
+We could not have implemented this project without referencing some pseudocode/code for complex algorithms.
 - We used Fortune's Sweepline Algorithm for generating Voronoi Diagrams. We referenced
 this GitHub user's implementation: https://github.com/dkotsur/FortuneAlgo
 - For drawing lines in 2D, we use Bresenham's algorithm
