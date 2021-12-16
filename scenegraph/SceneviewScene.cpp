@@ -39,7 +39,7 @@ SceneviewScene::~SceneviewScene()
 }
 
 void SceneviewScene::initializeImage(){
-    QString filepath = QString::fromStdString("/Users/marinatriebenbacher/Desktop/buildingImage.png");
+    QString filepath = QString::fromStdString("/Users/marinatriebenbacher/course/cs1230/graphics-fp/buildingImage.png");
     std::unique_ptr<QImage> image = std::make_unique<QImage>(filepath);
     m_image = image.operator*();
     m_image = QGLWidget::convertToGLFormat(m_image);
@@ -220,21 +220,23 @@ void SceneviewScene::renderGeometry() {
         m_shape->setVertexData(m_edges[i].getVertexData());
         m_shape->draw();
     }
-    m_phongShader->setUniform("useTexture", false);
-    //m_phongShader->setUniform("repeatUV", 1.f);
+    m_phongShader->setUniform("useTexture", true);
+    m_phongShader->setUniform("repeatUV", glm::vec2(1.f,1.f));
     std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image.bits(), m_image.width(), m_image.height(), GL_RGBA);
-
     std::unique_ptr<TextureParametersBuilder> tpb = std::make_unique<TextureParametersBuilder>();
     TextureParameters tp = tpb->build();
     tp.applyTo(t2d.operator*());
-    m_phongShader->setTexture("texture", t2d.operator*());
-   // m_phongShader->setUniform("repeatUV", true);
+    m_phongShader->setTexture("tex", t2d.operator*());
+    glBindTexture(GL_TEXTURE_2D, t2d->getTextureId());
+
     for(int i = 0; i < m_buildings.size(); i++){
         m_phongShader->applyMaterial(m_edgeMaterial);
         m_phongShader->setUniform("m", glm::mat4x4(1.0));
         m_shape->setVertexData(m_buildings[i].getVertexData());
         m_shape->draw();
     }
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     m_tesselate = false;
 }
 

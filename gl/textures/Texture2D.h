@@ -13,6 +13,9 @@ public:
 
     virtual void bind() const override;
     virtual void unbind() const override;
+    GLuint getTextureId();
+private:
+    GLuint m_texture_id;
 };
 
 }}
