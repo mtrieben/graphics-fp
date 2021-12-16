@@ -348,25 +348,25 @@ void MainWindow::fileOpen() {
                 std::vector<std::vector<std::vector<float>>> greens = m_voronoi->getGreens();
                 for(int i = 0; i < greens.size(); i++){
                     if(greens[i].size() == 3) {
-                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(greens[i][0][0]-100.f, greens[i][0][1]-100),
-                                glm::vec2(greens[i][1][0]-100.f, greens[i][1][1]-100.f),
-                                glm::vec2(greens[i][2][0]-100.f, greens[i][2][1]-100.f),
+                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(glm::clamp(greens[i][1][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][1][1]-100, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][1][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][1][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][0][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][0][1]-100.f, -100.f, 100.f)),
                                 .01);
                         m_canvas3D->addGreen(*green);
                     } else if(greens[i].size() == 4) {
-                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(greens[i][0][0]-100.f, greens[i][0][1]-100),
-                                glm::vec2(greens[i][1][0]-100.f, greens[i][1][1]-100.f),
-                                glm::vec2(greens[i][2][0]-100.f, greens[i][2][1]-100.f),
-                                glm::vec2(greens[i][3][0]-100.f, greens[i][3][1]-100.f),
+                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(glm::clamp(greens[i][3][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][3][1]-100, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][2][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][2][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][1][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][1][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][0][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][0][1]-100.f, -100.f, 100.f)),
                                 .01);
                         m_canvas3D->addGreen(*green);
                     }
                     else if(greens[i].size() == 5) {
-                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(greens[i][0][0]-100.f, greens[i][0][1]-100),
-                                glm::vec2(greens[i][1][0]-100.f, greens[i][1][1]-100.f),
-                                glm::vec2(greens[i][2][0]-100.f, greens[i][2][1]-100.f),
-                                glm::vec2(greens[i][3][0]-100.f, greens[i][3][1]-100.f),
-                                glm::vec2(greens[i][4][0]-100.f, greens[i][4][1]-100.f),
+                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(glm::clamp(greens[i][4][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][4][1]-100, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][3][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][3][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][2][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][2][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][1][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][1][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][0][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][0][1]-100.f, -100.f, 100.f)),
                                 .01);
                         m_canvas3D->addGreen(*green);
                     }
@@ -385,9 +385,6 @@ void MainWindow::fileOpen() {
                     m_canvas3D->addBuilding(buildling.operator*());
                 }
 
-
-
-                //
                 //ui->showSceneviewInstead->setChecked(true);
 
                 // Set the camera for the new scene

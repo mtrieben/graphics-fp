@@ -144,7 +144,6 @@ void Canvas2D::mouseDown(int x, int y) {
 
     std::cout << "Canvas2d::mouseDown() called" << std::endl;
     RGBA color = RGBA{255, 255, 255};
-    std::unique_ptr<PerlinNoise> perlin = std::make_unique<PerlinNoise>();
     for (int set = 0; set < m_edges.size(); set++) {
         if (set == m_edges.size() - 1) color = RGBA{255, 0, 0};
         for (int i = 0; i < m_edges[set].size(); i+=2) {
@@ -152,17 +151,28 @@ void Canvas2D::mouseDown(int x, int y) {
             plotLine((int) m_edges[set][i][0] * 3, (int) m_edges[set][i][1] * 3, (int) m_edges[set][i+1][0] * 3, (int) m_edges[set][i+1][1] * 3, this, color);
         }
     }
-    //std::cout << perlin->perlin(m_edges[set][i][0], m_edges[set][i][1], 0.f) << std::endl;
 
-    std::vector<std::vector<std::vector<float>>> pts = m_voronoi.getBuildyPoints();
+//    std::vector<std::vector<std::vector<float>>> greens = m_voronoi.getGreens();
 
-    for (int building = 0; building < pts.size(); building++) {
-        for (int i = 0; i < pts[building].size(); i++) {
-            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].r = 255.f;
-            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].g = 255.f;
-            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].b = 255.f;
-        }
-    }
+//    for (int g = 0; g < greens.size(); g++) {
+//        for (int i = 0; i < greens[g].size(); i++) {
+//            std::cout << i << std::endl;
+//            if(greens[g][i][0] * 3 < 0 || greens[g][i][0] * 3 >= this->height() || greens[g][i][1] * 3 < 0 || greens[g][i][1] * 3 >= this->width()) continue;
+//            this->data()[(int) greens[g][i][0] * 3 * this->width() + (int) greens[g][i][1] * 3].r = color.r;
+//            this->data()[(int) greens[g][i][0] * 3 * this->width() + (int) greens[g][i][1] * 3].g = color.g;
+//            this->data()[(int) greens[g][i][0] * 3 * this->width() + (int) greens[g][i][1] * 3].b = color.b;
+//        }
+//    }
+
+//    std::vector<std::vector<std::vector<float>>> pts = m_voronoi.getBuildyPoints();
+
+//    for (int building = 0; building < pts.size(); building++) {
+//        for (int i = 0; i < pts[building].size(); i++) {
+//            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].r = 255.f;
+//            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].g = 255.f;
+//            this->data()[(int) pts[building][i][0] * 3 * this->width() + (int) pts[building][i][1] * 3].b = 255.f;
+//        }
+//    }
 
 }
 
