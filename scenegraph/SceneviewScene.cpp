@@ -31,19 +31,19 @@ SceneviewScene::SceneviewScene():
     loadNormalsShader();
     loadNormalsArrowShader();
     initializeEdgeMaterial();
-    initializeImage();
+    m_image1 = initializeImage("/Users/marinatriebenbacher/course/cs1230/graphics-fp/texture.jpeg");
+
 }
 
 SceneviewScene::~SceneviewScene()
 {
 }
 
-void SceneviewScene::initializeImage(){
-    QString filepath = QString::fromStdString("/Users/marinatriebenbacher/course/cs1230/graphics-fp/buildingImage.png");
+QImage SceneviewScene::initializeImage(string path){
+    QString filepath = QString::fromStdString(path);
     std::unique_ptr<QImage> image = std::make_unique<QImage>(filepath);
-    m_image = image.operator*();
-    m_image = QGLWidget::convertToGLFormat(m_image);
-    std::cout << m_image.width() << " " << m_image.height() << std::endl;
+    QImage toRet = image.operator*();
+    return QGLWidget::convertToGLFormat(toRet);
 
 }
 
@@ -213,21 +213,21 @@ void SceneviewScene::renderGeometry() {
         m_shape->setVertexData(m_primShapes[i].data);
         m_shape->draw();
     }
+
+    m_phongShader->setUniform("useTexture", true);
+    m_phongShader->setUniform("repeatUV", glm::vec2(1.f,1.f));
+    std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image1.bits(), m_image1.width(), m_image1.height(), GL_RGBA);
+    std::unique_ptr<TextureParametersBuilder> tpb = std::make_unique<TextureParametersBuilder>();
+    TextureParameters tp = tpb->build();
+    tp.applyTo(t2d.operator*());
+    m_phongShader->setTexture("tex", t2d.operator*());
+    glBindTexture(GL_TEXTURE_2D, t2d->getTextureId1());
     for(int i = 0; i < m_edges.size(); i++){
-        m_phongShader->setUniform("useTexture", false);
         m_phongShader->applyMaterial(m_edgeMaterial);
         m_phongShader->setUniform("m", glm::mat4x4(1.0));
         m_shape->setVertexData(m_edges[i].getVertexData());
         m_shape->draw();
     }
-    m_phongShader->setUniform("useTexture", true);
-    m_phongShader->setUniform("repeatUV", glm::vec2(1.f,1.f));
-    std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image.bits(), m_image.width(), m_image.height(), GL_RGBA);
-    std::unique_ptr<TextureParametersBuilder> tpb = std::make_unique<TextureParametersBuilder>();
-    TextureParameters tp = tpb->build();
-    tp.applyTo(t2d.operator*());
-    m_phongShader->setTexture("tex", t2d.operator*());
-    glBindTexture(GL_TEXTURE_2D, t2d->getTextureId());
 
     for(int i = 0; i < m_buildings.size(); i++){
         m_phongShader->applyMaterial(m_edgeMaterial);

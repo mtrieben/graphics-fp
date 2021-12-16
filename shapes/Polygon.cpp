@@ -210,7 +210,7 @@ void Polygon::generatePoints(std::vector<glm::vec3> base1, std::vector<glm::vec3
             //std::cout << base1[i+1][0] << " " << base1[i+1][1] << " " << base1[i+1][2] << std::endl;
             addToVector(base1[i+1]);
             addToVector(norm1);
-            addToVector(glm::vec2(1.f,1.f));
+            addToVector(glm::vec2(.5f,1.f));
 
            // std::cout << base1[i][0] << " " << base1[i][1] << " " << base1[i][2] << std::endl;
             addToVector(base1[i]);
@@ -221,7 +221,7 @@ void Polygon::generatePoints(std::vector<glm::vec3> base1, std::vector<glm::vec3
          //   std::cout << base2[i+1][0] << " " << base2[i+1][1] << " " << base2[i+1][2] << std::endl;
             addToVector(base2[i+1]);
            addToVector(norm1);
-           addToVector(glm::vec2(1.f,0.f));
+           addToVector(glm::vec2(.5f,0.f));
 
 
             glm::vec3 norm2 = surfaceNormal(base1[i],base2[i+1], base2[i]);
@@ -229,7 +229,7 @@ void Polygon::generatePoints(std::vector<glm::vec3> base1, std::vector<glm::vec3
            // std::cout << base2[i+1][0] << " " << base2[i+1][1] << " " << base2[i+1][2] << std::endl;
             addToVector(base2[i+1]);
             addToVector(norm2);
-            addToVector(glm::vec2(1.f,0.f));
+            addToVector(glm::vec2(.5f,0.f));
 
 
           //  std::cout << base1[i][0] << " " << base1[i][1] << " " << base1[i][2] << std::endl;
