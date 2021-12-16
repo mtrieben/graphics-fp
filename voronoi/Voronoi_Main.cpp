@@ -436,10 +436,10 @@ std::vector<std::vector<float>> Voronoi_Main::generateSecondaryRoads(std::vector
         }
 //        std::cout << std::endl;
         std::vector<float> block_topLeftBottomRight = getBounds(block_points);
-        block_topLeftBottomRight[0] = std::max(block_topLeftBottomRight[0] + 2.f, 1.f);
-        block_topLeftBottomRight[1] = std::max(block_topLeftBottomRight[1] + 2.f, 1.f);
-        block_topLeftBottomRight[2] = std::min(block_topLeftBottomRight[2] - 2.f, 199.f);
-        block_topLeftBottomRight[3] = std::min(block_topLeftBottomRight[3] - 2.f, 199.f);
+        block_topLeftBottomRight[0] = std::max(block_topLeftBottomRight[0] + 1.5f, 1.f);
+        block_topLeftBottomRight[1] = std::max(block_topLeftBottomRight[1] + 1.5f, 1.f);
+        block_topLeftBottomRight[2] = std::min(block_topLeftBottomRight[2] - 1.5f, 199.f);
+        block_topLeftBottomRight[3] = std::min(block_topLeftBottomRight[3] - 1.5f, 199.f);
 //        std::cout << "top left: " << block_topLeftBottomRight[0] << ", " << block_topLeftBottomRight[1] << ", bottom right: " << block_topLeftBottomRight[2] << ", " << block_topLeftBottomRight[3] << std::endl;
 
         for (float x = block_topLeftBottomRight[0]; x <= block_topLeftBottomRight[2]; x += 3.5) {
@@ -453,10 +453,10 @@ std::vector<std::vector<float>> Voronoi_Main::generateSecondaryRoads(std::vector
 
     for (int building = 0; building < m_buildy_points.size(); building++) {
         std::vector<float> center = m_buildy_points[building][0];
-        m_buildy_points[building].push_back({center[0] - 1, center[1] - 1});
-        m_buildy_points[building].push_back({center[0] - 1, center[1] + 1});
-        m_buildy_points[building].push_back({center[0] + 1, center[1] + 1});
-        m_buildy_points[building].push_back({center[0] + 1, center[1] - 1});
+        m_buildy_points[building].push_back({center[0] - 1.5f, center[1] - 1.5f});
+        m_buildy_points[building].push_back({center[0] - 1.5f, center[1] + 1.5f});
+        m_buildy_points[building].push_back({center[0] + 1.5f, center[1] + 1.5f});
+        m_buildy_points[building].push_back({center[0] + 1.5f, center[1] - 1.5f});
     }
 
     return res;

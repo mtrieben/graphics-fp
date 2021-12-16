@@ -8,6 +8,7 @@
 #include "scenegraph/SceneviewScene.h"
 #include "camera/CamtransCamera.h"
 #include "CS123XmlSceneParser.h"
+#include "voronoi/PerlinNoise.h"
 #include <math.h>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -328,6 +329,8 @@ void MainWindow::fileOpen() {
             m_sceneParser = std::unique_ptr<CS123XmlSceneParser>(new CS123XmlSceneParser(file.toLatin1().data()));
             if (m_sceneParser->parse()) {
                 m_canvas3D->loadSceneviewSceneFromParser(*m_sceneParser);
+                std::unique_ptr<PerlinNoise> noise = std::make_unique<PerlinNoise>();
+
 
                 for (int set = 0; set < m_edges.size(); set++) {
                     int width = 2;
@@ -341,11 +344,24 @@ void MainWindow::fileOpen() {
                         m_canvas3D->addEdge(edge.operator*());
                     }
                 }
-                std::unique_ptr<Polygon> buildling = std::make_unique<Polygon>(glm::vec2(-1.f, -1.f), glm::vec2(1.f, -1.f), glm::vec2(1.5f,.5f), glm::vec2(0.f,1.f), glm::vec2(-1.5f, .5f), 2.f);
-                m_canvas3D->addBuilding(buildling.operator*());
+                std::vector<std::vector<std::vector<float>>> building = m_voronoi->getBuildyPoints();
+                for(int i = 0; i < building.size(); i++){
+                    float perlin = noise->perlin(building[i][0][0]-100.f, building[i][0][1]-100.f, 0.01f);
+//                    std::cout << perlin << std::endl;
+//                    std::cout << building[i][1][0]-100.f << " " << building[i][1][1]-100.f << std::endl;
+//                    std::cout << building[i][2][0]-100.f << " " << building[i][2][1]-100.f << std::endl;
+//                    std::cout << building[i][3][0]-100.f << " " << building[i][3][1]-100.f << std::endl;
+//                    std::cout << building[i][4][0]-100.f << " " << building[i][4][1]-100.f << std::endl;
 
-                std::unique_ptr<Polygon> buildling1 = std::make_unique<Polygon>(glm::vec2(-10.f, -10.f), glm::vec2(-9.f,-9.f), glm::vec2(-10.f, -9.f), 2.f);
-                m_canvas3D->addBuilding(buildling1.operator*());
+
+                    std::unique_ptr<Polygon> buildling = std::make_unique<Polygon>(glm::vec2(building[i][1][0]-100.f, building[i][1][1]-100),
+                            glm::vec2(building[i][2][0]-100.f, building[i][2][1]-100.f),
+                            glm::vec2(building[i][3][0]-100.f, building[i][3][1]-100.f),
+                            glm::vec2(building[i][4][0]-100.f, building[i][4][1]-100.f),
+                            perlin*10.f);
+                    m_canvas3D->addBuilding(buildling.operator*());
+                }
+
 
 
                 //

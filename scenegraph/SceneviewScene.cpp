@@ -216,23 +216,22 @@ void SceneviewScene::renderGeometry() {
     for(int i = 0; i < m_edges.size(); i++){
         m_phongShader->setUniform("useTexture", false);
         m_phongShader->applyMaterial(m_edgeMaterial);
-        m_phongShader->setUniform("m", glm::mat4x4());
+        m_phongShader->setUniform("m", glm::mat4x4(1.0));
         m_shape->setVertexData(m_edges[i].getVertexData());
         m_shape->draw();
     }
     m_phongShader->setUniform("useTexture", false);
     //m_phongShader->setUniform("repeatUV", 1.f);
-    std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image.bits(), m_image.width(), m_image.height(), GL_FLOAT);
+    std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image.bits(), m_image.width(), m_image.height(), GL_RGBA);
 
     std::unique_ptr<TextureParametersBuilder> tpb = std::make_unique<TextureParametersBuilder>();
     TextureParameters tp = tpb->build();
-
     tp.applyTo(t2d.operator*());
     m_phongShader->setTexture("texture", t2d.operator*());
    // m_phongShader->setUniform("repeatUV", true);
     for(int i = 0; i < m_buildings.size(); i++){
         m_phongShader->applyMaterial(m_edgeMaterial);
-        m_phongShader->setUniform("m", glm::mat4x4());
+        m_phongShader->setUniform("m", glm::mat4x4(1.0));
         m_shape->setVertexData(m_buildings[i].getVertexData());
         m_shape->draw();
     }
