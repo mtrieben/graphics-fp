@@ -1,0 +1,31 @@
+ _____ _____    _    __  __    ____ ___ _____ ___ ____ ___ _  _______ 
+|_   _| ____|  / \  |  \/  |  / ___|_ _|_   _|_ _| __ )_ _| |/ / ____|
+  | | |  _|   / _ \ | |\/| | | |    | |  | |  | ||  _ \| || ' /|  _|  
+  | | | |___ / ___ \| |  | | | |___ | |  | |  | || |_) | || . \| |___ 
+  |_| |_____/_/   \_\_|  |_|  \____|___| |_| |___|____/___|_|\_\_____| README :)
+
+
+HOW TO USE: 
+1. In SceneviewScene.cpp, change the path to the texture image to the absolute path to the image on 
+Your computer.
+2. Run the application (you might have to clean/run qmake – sometimes we have to)
+3. To see the 2D road diagram, click the 2D tab, and then click the canvas
+4. To see the 3D map, open the final.xml file in the repo
+5. To use orbiting camera:
+	- Increase FOV to ~50
+	- Scroll out a ton until you see everything
+6. To use cam trans camera:
+	- Increase FOV to ~150 (this will distort things for now)
+	- Increase far cutoff point to ~50
+	- Translate z out, then decrease FOV a bit. Repeat until the buildings do not look distorted.
+
+THINGS WE WOULD IMPROVE IF WE HAD TIME
+Because our shapes are so large, the cameras we use in the class struggle to handle it, thus
+We must zoom out a lot in order to see the shapes. We would work on making the cameras easier to maneuver and make the movement smoother (we have a ton of tessellated triangles).
+
+REFERENCES
+We could not have implemented this project without referencing some pseudocode for complex algorithms.
+- We used Fortune's Sweepline Algorithm for generating Voronoi Diagrams. We referenced
+this GitHub user's implementation: https://github.com/dkotsur/FortuneAlgo
+- For drawing lines in 2D, we use Bresenham's algorithm
+- For Perlin Noise, we referenced Ken Perlin's original Java implementation
