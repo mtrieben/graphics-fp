@@ -49,7 +49,7 @@ Polygon::Polygon(glm::vec2 l, glm::vec2 r, glm::vec2 t, float height){
 
 }
 
-Polygon::Polygon(glm::vec2 l0 , glm::vec2 l1 , glm::vec2 r0, glm::vec2 r1, float height){
+Polygon::Polygon(glm::vec2 l0 , glm::vec2 l1 , glm::vec2 r1, glm::vec2 r0, float height){
     std::vector<glm::vec3> base1;
     base1.push_back(glm::vec3(l0.x, l0.y, 0.01f));
     base1.push_back(glm::vec3(l1.x, l1.y, 0.01f));
@@ -69,20 +69,20 @@ Polygon::Polygon(glm::vec2 l0 , glm::vec2 l1 , glm::vec2 r0, glm::vec2 r1, float
     glm::vec3 normal = glm::vec3(0.f,0.f,-1.f);
     glm::vec2 uv = glm::vec2(0.f,0.f);
 
-    addToVector(base1[0]);
+    addToVector(base1[1]);
     addToVector(normal);
     addToVector(uv);
-    addToVector(base1[1]);
+    addToVector(base1[0]);
     addToVector(normal);
     addToVector(uv);
     addToVector(base1[2]);
     addToVector(normal);
     addToVector(uv);
 
-    addToVector(base1[2]);
+    addToVector(base1[3]);
     addToVector(normal);
     addToVector(uv);
-    addToVector(base1[3]);
+    addToVector(base1[2]);
     addToVector(normal);
     addToVector(uv);
     addToVector(base1[4]);
@@ -91,20 +91,20 @@ Polygon::Polygon(glm::vec2 l0 , glm::vec2 l1 , glm::vec2 r0, glm::vec2 r1, float
 
     normal[2] = 1.f;
 
-    addToVector(base2[0]);
+    addToVector(base2[1]);
     addToVector(normal);
     addToVector(uv);
-    addToVector(base2[1]);
+    addToVector(base2[0]);
     addToVector(normal);
     addToVector(uv);
     addToVector(base2[2]);
     addToVector(normal);
     addToVector(uv);
 
-    addToVector(base2[2]);
+    addToVector(base2[3]);
     addToVector(normal);
     addToVector(uv);
-    addToVector(base2[3]);
+    addToVector(base2[2]);
     addToVector(normal);
     addToVector(uv);
     addToVector(base2[4]);
@@ -206,42 +206,42 @@ void Polygon::generatePoints(std::vector<glm::vec3> base1, std::vector<glm::vec3
           //  float theta_i = ((2.0*M_PI)/m_param2)*(i-1);
           //  float theta_i1 = ((2.0*M_PI)/m_param2)*(i);
             glm::vec3 norm1 = surfaceNormal(base1[i],base1[i+1], base2[i+1]);
-            addToVector(base1[i]);
-            addToVector(norm1);
-            addToVector(glm::vec2(0.f,1.f));
-           //addToVector(glm::normalize(glm::vec3(cos(theta_i), y, sin(theta_i))));
 
+            //std::cout << base1[i+1][0] << " " << base1[i+1][1] << " " << base1[i+1][2] << std::endl;
             addToVector(base1[i+1]);
             addToVector(norm1);
             addToVector(glm::vec2(1.f,1.f));
 
-        //   addToVector(glm::normalize(glm::vec3(cos(theta_i1), y, sin(theta_i1))));
+           // std::cout << base1[i][0] << " " << base1[i][1] << " " << base1[i][2] << std::endl;
+            addToVector(base1[i]);
+            addToVector(norm1);
+            addToVector(glm::vec2(0.f,1.f));
 
+
+         //   std::cout << base2[i+1][0] << " " << base2[i+1][1] << " " << base2[i+1][2] << std::endl;
             addToVector(base2[i+1]);
            addToVector(norm1);
            addToVector(glm::vec2(1.f,0.f));
 
-        //  addToVector(glm::normalize(glm::vec3(cos(theta_i1), y, sin(theta_i1))));
 
             glm::vec3 norm2 = surfaceNormal(base1[i],base2[i+1], base2[i]);
 
-            addToVector(base1[i]);
-            addToVector(norm2);
-            addToVector(glm::vec2(0.f,1.f));
-
-          //  addToVector(glm::normalize(glm::vec3(cos(theta_i), y, sin(theta_i))));
-
+           // std::cout << base2[i+1][0] << " " << base2[i+1][1] << " " << base2[i+1][2] << std::endl;
             addToVector(base2[i+1]);
             addToVector(norm2);
             addToVector(glm::vec2(1.f,0.f));
 
-           // addToVector(glm::normalize(glm::vec3(cos(theta_i1), y, sin(theta_i1))));
 
+          //  std::cout << base1[i][0] << " " << base1[i][1] << " " << base1[i][2] << std::endl;
+            addToVector(base1[i]);
+            addToVector(norm2);
+            addToVector(glm::vec2(0.f,1.f));
+
+
+          //  std::cout << base2[i][0] << " " << base2[i][1] << " " << base2[i][2] << std::endl;
             addToVector(base2[i]);
             addToVector(norm2);
             addToVector(glm::vec2(0.f,0.f));
-
-         //   addToVector(glm::normalize(glm::vec3(cos(theta_i), y, sin(theta_i))));
         }
 
 }

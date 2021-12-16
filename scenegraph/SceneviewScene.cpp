@@ -39,7 +39,7 @@ SceneviewScene::~SceneviewScene()
 }
 
 void SceneviewScene::initializeImage(){
-    QString filepath = QString::fromStdString("/Users/marinatriebenbacher/Desktop/buildingImage.png");
+    QString filepath = QString::fromStdString("/Users/zachmothner/Desktop/Desktop/IMG_8402.jpeg");
     std::unique_ptr<QImage> image = std::make_unique<QImage>(filepath);
     m_image = image.operator*();
     m_image = QGLWidget::convertToGLFormat(m_image);
@@ -61,9 +61,27 @@ void SceneviewScene::initializeEdgeMaterial(){
     m_edgeMaterial.shininess = 0.5f;
 }
 
+void SceneviewScene::initializeGreenMaterial(){
+    m_greenMaterial = CS123SceneMaterial();
+    m_greenMaterial.cDiffuse = CS123SceneColor(glm::vec4(0,1,0,0));
+    m_greenMaterial.cAmbient = CS123SceneColor(glm::vec4(0,0.5f,0,0));
+    m_greenMaterial.cReflective = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_greenMaterial.cSpecular = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_greenMaterial.cTransparent = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_greenMaterial.cEmissive = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_greenMaterial.textureMap = CS123SceneFileMap();
+    m_greenMaterial.textureMap.isUsed = false;
+    m_greenMaterial.blend = 1.f;
+    m_greenMaterial.shininess = 0.5f;
+}
+
 
 void SceneviewScene::addEdge(VoronoiEdge edge){
     m_edges.push_back(edge);
+}
+
+void SceneviewScene::addGreen(Polygon green){
+    m_greens.push_back(green);
 }
 
 void SceneviewScene::addBuilding(Polygon building){
@@ -213,26 +231,36 @@ void SceneviewScene::renderGeometry() {
         m_shape->setVertexData(m_primShapes[i].data);
         m_shape->draw();
     }
+
+//    std::vector<std::vector<std::vector<float>>> greens = vorono
     for(int i = 0; i < m_edges.size(); i++){
         m_phongShader->setUniform("useTexture", false);
-        m_phongShader->applyMaterial(m_edgeMaterial);
-        m_phongShader->setUniform("m", glm::mat4x4());
+        m_phongShader->applyMaterial(m_greenMaterial);
+        m_phongShader->setUniform("m", glm::mat4x4(1.0));
         m_shape->setVertexData(m_edges[i].getVertexData());
         m_shape->draw();
     }
-    m_phongShader->setUniform("useTexture", false);
-    //m_phongShader->setUniform("repeatUV", 1.f);
-    std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image.bits(), m_image.width(), m_image.height(), GL_FLOAT);
+    for(int i = 0; i < m_greens.size(); i++){
+        m_phongShader->setUniform("useTexture", false);
+        m_phongShader->applyMaterial(m_greenMaterial);
+        m_phongShader->setUniform("m", glm::mat4x4(1.0));
+        m_shape->setVertexData(m_greens[i].getVertexData());
+        m_shape->draw();
+    }
+    m_tesselate = false;
+
+    m_phongShader->setUniform("useTexture", true);
+    m_phongShader->setUniform("repeatUV", 1.f);
+    std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image.bits(), m_image.width(), m_image.height(), GL_UNSIGNED_BYTE);
 
     std::unique_ptr<TextureParametersBuilder> tpb = std::make_unique<TextureParametersBuilder>();
     TextureParameters tp = tpb->build();
-
     tp.applyTo(t2d.operator*());
-    m_phongShader->setTexture("texture", t2d.operator*());
+    m_phongShader->setTexture("tex", t2d.operator*());
    // m_phongShader->setUniform("repeatUV", true);
     for(int i = 0; i < m_buildings.size(); i++){
         m_phongShader->applyMaterial(m_edgeMaterial);
-        m_phongShader->setUniform("m", glm::mat4x4());
+        m_phongShader->setUniform("m", glm::mat4x4(1.0));
         m_shape->setVertexData(m_buildings[i].getVertexData());
         m_shape->draw();
     }

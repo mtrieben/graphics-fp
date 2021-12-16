@@ -431,6 +431,7 @@ std::vector<std::vector<float>> Voronoi_Main::generateSecondaryRoads(std::vector
 //        std::cout << std::endl;
 
         block_points = scalePolygon(block_points, 2);
+        m_greens.push_back(block_points);
         for (int i = 0; i < block_points.size(); i++) {
 //            std::cout << "scaled pt " << i << ": " << block_points[i][0] << ", " << block_points[i][1] << " ";
         }
@@ -461,6 +462,11 @@ std::vector<std::vector<float>> Voronoi_Main::generateSecondaryRoads(std::vector
 
     return res;
 }
+
+std::vector<std::vector<std::vector<float>>> Voronoi_Main::getGreens() {
+    return m_greens;
+}
+
 
 std::vector<std::vector<std::vector<float>>> Voronoi_Main::getBuildyPoints() {
     return m_buildy_points;

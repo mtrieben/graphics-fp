@@ -150,6 +150,10 @@ void SupportCanvas3D::addEdge(VoronoiEdge edge){
     m_sceneviewScene->addEdge(edge);
 }
 
+void SupportCanvas3D::addGreen(Polygon green){
+    m_sceneviewScene->addGreen(green);
+}
+
 void SupportCanvas3D::addBuilding(Polygon building){
     m_sceneviewScene->addBuilding(building);
 }

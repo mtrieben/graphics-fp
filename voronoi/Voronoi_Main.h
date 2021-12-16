@@ -14,6 +14,7 @@ public:
     std::vector<std::vector<std::vector<float>>> main();
     std::vector<std::vector<float>> generateSecondaryRoads(std::vector<std::vector<float>> face_points, int dist);
     std::vector<std::vector<std::vector<float>>> getBuildyPoints();
+    std::vector<std::vector<std::vector<float>>> getGreens();
 
     std::vector<std::vector<std::vector<float>>> m_allRoads;
     std::vector<std::vector<float>> m_primaryRoads;
@@ -23,6 +24,7 @@ public:
     std::vector<bl::VertexPtr> m_primaryVertices;
 
     std::vector<std::vector<std::vector<float>>> m_buildy_points;
+    std::vector<std::vector<std::vector<float>>> m_greens;
 };
 
 #endif // VORONOI_MAIN_H
