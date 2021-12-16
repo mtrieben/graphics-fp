@@ -74,6 +74,7 @@ public slots:
     void updateCameraClip();
     void addEdge(VoronoiEdge edge);
     void addBuilding(Polygon building);
+    void addGreen(Polygon green);
 
 signals:
     void aspectRatioChanged();

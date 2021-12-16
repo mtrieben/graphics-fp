@@ -289,7 +289,8 @@ std::vector<std::vector<float>> boundRoad(std::vector<float> p1, std::vector<flo
     return {insidePoint, boundedPoint};
 }
 
-std::vector<std::vector<float>> boundToCanvas(std::vector<std::vector<float>> points, std::vector<std::vector<float>> corners) {
+std::vector<std::vector<float>> boundToCanvas(std::vector<std::vector<float>> points) {
+    std::vector<std::vector<float>> corners = {{0.f, 0.f}, {0.f, 200.f}, {200.f, 200.f}, {200.f, 0.f}};
     std::vector<std::vector<float>> boundResult;
 
     for (int i = 0; i < points.size() - 1; i+=2) {
@@ -425,15 +426,16 @@ std::vector<std::vector<float>> Voronoi_Main::generateSecondaryRoads(std::vector
             } while (he != nullptr && he != he_end);
         }
 
-        for (int i = 0; i < block_points.size(); i++) {
+//        for (int i = 0; i < block_points.size(); i++) {
 //            std::cout << "pt " << i << ": " << block_points[i][0] << ", " << block_points[i][1] << " ";
-        }
+//        }
 //        std::cout << std::endl;
 
         block_points = scalePolygon(block_points, 2);
-        for (int i = 0; i < block_points.size(); i++) {
+        m_greens.push_back(block_points);
+//        for (int i = 0; i < block_points.size(); i++) {
 //            std::cout << "scaled pt " << i << ": " << block_points[i][0] << ", " << block_points[i][1] << " ";
-        }
+//        }
 //        std::cout << std::endl;
         std::vector<float> block_topLeftBottomRight = getBounds(block_points);
         block_topLeftBottomRight[0] = std::max(block_topLeftBottomRight[0] + 1.5f, 1.f);
@@ -461,6 +463,11 @@ std::vector<std::vector<float>> Voronoi_Main::generateSecondaryRoads(std::vector
 
     return res;
 }
+
+std::vector<std::vector<std::vector<float>>> Voronoi_Main::getGreens() {
+    return m_greens;
+}
+
 
 std::vector<std::vector<std::vector<float>>> Voronoi_Main::getBuildyPoints() {
     return m_buildy_points;
@@ -513,8 +520,6 @@ std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
 //    }
 //    printf("\n\n");
 
-    std::vector<std::vector<float>> canvas_corners = {{0.f, 0.f}, {0.f, 200.f}, {200.f, 200.f}, {200.f, 0.f}};
-
     /**
      Iterate around the point CCW
      */
@@ -560,11 +565,11 @@ std::vector<std::vector<std::vector<float>>> Voronoi_Main::main() {
             } while (he != nullptr && he != he_end);
         }
 
-        m_secondaryRoads.push_back(boundToCanvas(this->generateSecondaryRoads(face_points, 15), canvas_corners));
+        m_secondaryRoads.push_back(boundToCanvas(this->generateSecondaryRoads(face_points, 15)));
         m_allRoads.push_back(m_secondaryRoads.back());
     }
 
-    m_primaryRoads = boundToCanvas(m_primaryRoads, canvas_corners);
+    m_primaryRoads = boundToCanvas(m_primaryRoads);
 
     m_allRoads.push_back(m_primaryRoads);
 

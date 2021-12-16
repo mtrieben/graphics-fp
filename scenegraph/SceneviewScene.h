@@ -51,6 +51,7 @@ public:
     void setSelection(int x, int y);
     void addEdge(VoronoiEdge edge);
     void addBuilding(Polygon building);
+    void addGreen(Polygon green);
 
 private:
 
@@ -69,6 +70,7 @@ private:
     void renderGeometry();
     void initializeEdgeMaterial();
     QImage initializeImage(string path);
+    void initializeGreenMaterial();
 
     std::unique_ptr<CS123::GL::CS123Shader> m_phongShader;
     std::unique_ptr<CS123::GL::Shader> m_wireframeShader;
@@ -83,11 +85,12 @@ private:
 
     std::vector<PrimShape> m_primShapes;
     std::vector<VoronoiEdge> m_edges;
+    std::vector<Polygon> m_greens;
     std::vector<Polygon> m_buildings;
     CS123SceneMaterial m_edgeMaterial;
-    QImage m_image1;
-    QImage m_image2;
 
+    QImage m_image1;
+    CS123SceneMaterial m_greenMaterial;
 
 
 };

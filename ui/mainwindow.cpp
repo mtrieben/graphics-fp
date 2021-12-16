@@ -221,7 +221,7 @@ void MainWindow::dataBind() {
     BIND(FloatBinding::bindSliderAndTextbox(
               ui->cameraNearSlider, ui->cameraNearTextbox, settings.cameraNear, 0.1, 50))
     BIND(FloatBinding::bindSliderAndTextbox(
-              ui->cameraFarSlider, ui->cameraFarTextbox, settings.cameraFar, 0.1, 50))
+              ui->cameraFarSlider, ui->cameraFarTextbox, settings.cameraFar, 0.1, 450))
     initializeCamtransFrustum(); // always set the viewing frustum to reasonable settings when we start the program
 
 
@@ -344,15 +344,38 @@ void MainWindow::fileOpen() {
                         m_canvas3D->addEdge(edge.operator*());
                     }
                 }
+
+                std::vector<std::vector<std::vector<float>>> greens = m_voronoi->getGreens();
+                for(int i = 0; i < greens.size(); i++){
+                    if(greens[i].size() == 3) {
+                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(glm::clamp(greens[i][1][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][1][1]-100, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][1][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][1][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][0][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][0][1]-100.f, -100.f, 100.f)),
+                                .01);
+                        m_canvas3D->addGreen(*green);
+                    } else if(greens[i].size() == 4) {
+                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(glm::clamp(greens[i][3][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][3][1]-100, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][2][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][2][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][1][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][1][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][0][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][0][1]-100.f, -100.f, 100.f)),
+                                .01);
+                        m_canvas3D->addGreen(*green);
+                    }
+                    else if(greens[i].size() == 5) {
+                        std::unique_ptr<Polygon> green = std::make_unique<Polygon>(glm::vec2(glm::clamp(greens[i][4][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][4][1]-100, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][3][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][3][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][2][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][2][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][1][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][1][1]-100.f, -100.f, 100.f)),
+                                glm::vec2(glm::clamp(greens[i][0][0]-100.f, -100.f, 100.f), glm::clamp(greens[i][0][1]-100.f, -100.f, 100.f)),
+                                .01);
+                        m_canvas3D->addGreen(*green);
+                    }
+
+                }
+
                 std::vector<std::vector<std::vector<float>>> building = m_voronoi->getBuildyPoints();
                 for(int i = 0; i < building.size(); i++){
                     float perlin = noise->perlin(building[i][0][0]-100.f, building[i][0][1]-100.f, 0.01f);
-//                    std::cout << perlin << std::endl;
-//                    std::cout << building[i][1][0]-100.f << " " << building[i][1][1]-100.f << std::endl;
-//                    std::cout << building[i][2][0]-100.f << " " << building[i][2][1]-100.f << std::endl;
-//                    std::cout << building[i][3][0]-100.f << " " << building[i][3][1]-100.f << std::endl;
-//                    std::cout << building[i][4][0]-100.f << " " << building[i][4][1]-100.f << std::endl;
-
 
                     std::unique_ptr<Polygon> buildling = std::make_unique<Polygon>(glm::vec2(building[i][1][0]-100.f, building[i][1][1]-100),
                             glm::vec2(building[i][2][0]-100.f, building[i][2][1]-100.f),
@@ -362,9 +385,6 @@ void MainWindow::fileOpen() {
                     m_canvas3D->addBuilding(buildling.operator*());
                 }
 
-
-
-                //
                 //ui->showSceneviewInstead->setChecked(true);
 
                 // Set the camera for the new scene

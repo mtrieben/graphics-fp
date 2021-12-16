@@ -23,7 +23,7 @@ using namespace CS123::GL;
 SceneviewScene::SceneviewScene():
     m_param1(0),
     m_param2(0),
-    m_tesselate(false),
+    m_tesselate(true),
     m_initialize(true)
 {
     loadPhongShader();
@@ -31,7 +31,10 @@ SceneviewScene::SceneviewScene():
     loadNormalsShader();
     loadNormalsArrowShader();
     initializeEdgeMaterial();
+
     m_image1 = initializeImage("/Users/marinatriebenbacher/course/cs1230/graphics-fp/texture.jpeg");
+
+    initializeGreenMaterial();
 
 }
 
@@ -61,9 +64,27 @@ void SceneviewScene::initializeEdgeMaterial(){
     m_edgeMaterial.shininess = 0.5f;
 }
 
+void SceneviewScene::initializeGreenMaterial(){
+    m_greenMaterial = CS123SceneMaterial();
+    m_greenMaterial.cDiffuse = CS123SceneColor(glm::vec4(.36f,.71f,.36f,0));
+    m_greenMaterial.cAmbient = CS123SceneColor(glm::vec4(0,0.5f,0,0));
+    m_greenMaterial.cReflective = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_greenMaterial.cSpecular = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_greenMaterial.cTransparent = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_greenMaterial.cEmissive = CS123SceneColor(glm::vec4(0,0,0,0));
+    m_greenMaterial.textureMap = CS123SceneFileMap();
+    m_greenMaterial.textureMap.isUsed = false;
+    m_greenMaterial.blend = 1.f;
+    m_greenMaterial.shininess = 0.5f;
+}
+
 
 void SceneviewScene::addEdge(VoronoiEdge edge){
     m_edges.push_back(edge);
+}
+
+void SceneviewScene::addGreen(Polygon green){
+    m_greens.push_back(green);
 }
 
 void SceneviewScene::addBuilding(Polygon building){
@@ -214,28 +235,38 @@ void SceneviewScene::renderGeometry() {
         m_shape->draw();
     }
 
-    m_phongShader->setUniform("useTexture", true);
-    m_phongShader->setUniform("repeatUV", glm::vec2(1.f,1.f));
-    std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image1.bits(), m_image1.width(), m_image1.height(), GL_RGBA);
-    std::unique_ptr<TextureParametersBuilder> tpb = std::make_unique<TextureParametersBuilder>();
-    TextureParameters tp = tpb->build();
-    tp.applyTo(t2d.operator*());
-    m_phongShader->setTexture("tex", t2d.operator*());
-    glBindTexture(GL_TEXTURE_2D, t2d->getTextureId1());
-    for(int i = 0; i < m_edges.size(); i++){
-        m_phongShader->applyMaterial(m_edgeMaterial);
-        m_phongShader->setUniform("m", glm::mat4x4(1.0));
-        m_shape->setVertexData(m_edges[i].getVertexData());
-        m_shape->draw();
-    }
+        for(int i = 0; i < m_greens.size(); i++){
+            m_phongShader->setUniform("useTexture", false);
+            m_phongShader->applyMaterial(m_greenMaterial);
+            m_phongShader->setUniform("m", glm::mat4x4(1.0));
+            m_shape->setVertexData(m_greens[i].getVertexData());
+            m_shape->draw();
+        }
 
-    for(int i = 0; i < m_buildings.size(); i++){
-        m_phongShader->applyMaterial(m_edgeMaterial);
-        m_phongShader->setUniform("m", glm::mat4x4(1.0));
-        m_shape->setVertexData(m_buildings[i].getVertexData());
-        m_shape->draw();
-    }
-    glBindTexture(GL_TEXTURE_2D, 0);
+
+        m_phongShader->setUniform("useTexture", true);
+        m_phongShader->setUniform("repeatUV", glm::vec2(1.f,1.f));
+        std::unique_ptr<Texture2D> t2d = std::make_unique<Texture2D>(m_image1.bits(), m_image1.width(), m_image1.height(), GL_RGBA);
+        std::unique_ptr<TextureParametersBuilder> tpb = std::make_unique<TextureParametersBuilder>();
+        TextureParameters tp = tpb->build();
+        tp.applyTo(t2d.operator*());
+        m_phongShader->setTexture("tex", t2d.operator*());
+
+        glBindTexture(GL_TEXTURE_2D, t2d->getTextureId1());
+        for(int i = 0; i < m_edges.size(); i++){
+            m_phongShader->applyMaterial(m_edgeMaterial);
+            m_phongShader->setUniform("m", glm::mat4x4(1.0));
+            m_shape->setVertexData(m_edges[i].getVertexData());
+            m_shape->draw();
+        }
+
+        for(int i = 0; i < m_buildings.size(); i++){
+            m_phongShader->applyMaterial(m_edgeMaterial);
+            m_phongShader->setUniform("m", glm::mat4x4(1.0));
+            m_shape->setVertexData(m_buildings[i].getVertexData());
+            m_shape->draw();
+        }
+        glBindTexture(GL_TEXTURE_2D, 0);
 
     m_tesselate = false;
 }
@@ -245,9 +276,9 @@ void SceneviewScene::settingsChanged() {
     if(m_primatives.size() != m_primShapes.size()){
         this->initializeTesselations();
     }
-    if (m_param1 != settings.shapeParameter1 || m_param2 != settings.shapeParameter2){
-        m_tesselate = true;
-    }
+//    if (m_param1 != settings.shapeParameter1 || m_param2 != settings.shapeParameter2){
+//        m_tesselate = true;
+//    }
     m_param1 = settings.shapeParameter1;
     m_param2 = settings.shapeParameter2;
 }
