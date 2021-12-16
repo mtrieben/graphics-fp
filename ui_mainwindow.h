@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.14.2
+** Created by: Qt User Interface Compiler version 5.12.11
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -366,7 +366,7 @@ public:
         verticalLayout_4->addWidget(rayDockEmptySpace);
 
         rayDock->setWidget(rayDockContents);
-        MainWindow->addDockWidget(Qt::LeftDockWidgetArea, rayDock);
+        MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), rayDock);
         camtransDock = new QDockWidget(MainWindow);
         camtransDock->setObjectName(QString::fromUtf8("camtransDock"));
         camtransDockContents = new QWidget();
@@ -661,7 +661,7 @@ public:
         verticalLayout_10->addWidget(cameraDockEmptySpace);
 
         camtransDock->setWidget(camtransDockContents);
-        MainWindow->addDockWidget(Qt::LeftDockWidgetArea, camtransDock);
+        MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), camtransDock);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 600, 24));
@@ -728,85 +728,85 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "CS 123: Introduction to Computer Graphics", nullptr));
-        actionNew->setText(QCoreApplication::translate("MainWindow", "&New", nullptr));
-#if QT_CONFIG(shortcut)
-        actionNew->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+N", nullptr));
-#endif // QT_CONFIG(shortcut)
-        actionOpen->setText(QCoreApplication::translate("MainWindow", "&Open...", nullptr));
-#if QT_CONFIG(shortcut)
-        actionOpen->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+O", nullptr));
-#endif // QT_CONFIG(shortcut)
-        actionSave->setText(QCoreApplication::translate("MainWindow", "&Save...", nullptr));
-#if QT_CONFIG(shortcut)
-        actionSave->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+S", nullptr));
-#endif // QT_CONFIG(shortcut)
-        actionQuit->setText(QCoreApplication::translate("MainWindow", "&Quit", nullptr));
-#if QT_CONFIG(shortcut)
-        actionQuit->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+Q", nullptr));
-#endif // QT_CONFIG(shortcut)
-        actionRevert->setText(QCoreApplication::translate("MainWindow", "&Revert Image", nullptr));
-#if QT_CONFIG(shortcut)
-        actionRevert->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+R", nullptr));
-#endif // QT_CONFIG(shortcut)
-        actionCopy3Dto2D->setText(QCoreApplication::translate("MainWindow", "Copy &3D tab to 2D tab", nullptr));
-        actionClear->setText(QCoreApplication::translate("MainWindow", "&Clear Image", nullptr));
-#if QT_CONFIG(tooltip)
-        actionClear->setToolTip(QCoreApplication::translate("MainWindow", "Clear Image", nullptr));
-#endif // QT_CONFIG(tooltip)
-#if QT_CONFIG(shortcut)
-        actionClear->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+C", nullptr));
-#endif // QT_CONFIG(shortcut)
-        actionUseOrbitingCamera->setText(QCoreApplication::translate("MainWindow", "&Use Orbiting Camera", nullptr));
-#if QT_CONFIG(shortcut)
-        actionUseOrbitingCamera->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+B", nullptr));
-#endif // QT_CONFIG(shortcut)
-        tabWidget->setTabText(tabWidget->indexOf(tab2D), QCoreApplication::translate("MainWindow", "2D", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab3D), QCoreApplication::translate("MainWindow", "3D", nullptr));
-        rayDock->setWindowTitle(QCoreApplication::translate("MainWindow", "&Ray", nullptr));
-        rayAllButton->setText(QCoreApplication::translate("MainWindow", "All", nullptr));
-        rayNoneButton->setText(QCoreApplication::translate("MainWindow", "None", nullptr));
-        rayFeatures->setTitle(QCoreApplication::translate("MainWindow", "Features", nullptr));
-        raySuperSamping->setText(QCoreApplication::translate("MainWindow", "Super sampling", nullptr));
-        raySuperSamplesLabel->setText(QCoreApplication::translate("MainWindow", "sqrt(samples)", nullptr));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "CS 123: Introduction to Computer Graphics", nullptr));
+        actionNew->setText(QApplication::translate("MainWindow", "&New", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionNew->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionOpen->setText(QApplication::translate("MainWindow", "&Open...", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionSave->setText(QApplication::translate("MainWindow", "&Save...", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionSave->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionQuit->setText(QApplication::translate("MainWindow", "&Quit", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionRevert->setText(QApplication::translate("MainWindow", "&Revert Image", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionRevert->setShortcut(QApplication::translate("MainWindow", "Ctrl+R", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionCopy3Dto2D->setText(QApplication::translate("MainWindow", "Copy &3D tab to 2D tab", nullptr));
+        actionClear->setText(QApplication::translate("MainWindow", "&Clear Image", nullptr));
+#ifndef QT_NO_TOOLTIP
+        actionClear->setToolTip(QApplication::translate("MainWindow", "Clear Image", nullptr));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_SHORTCUT
+        actionClear->setShortcut(QApplication::translate("MainWindow", "Ctrl+C", nullptr));
+#endif // QT_NO_SHORTCUT
+        actionUseOrbitingCamera->setText(QApplication::translate("MainWindow", "&Use Orbiting Camera", nullptr));
+#ifndef QT_NO_SHORTCUT
+        actionUseOrbitingCamera->setShortcut(QApplication::translate("MainWindow", "Ctrl+B", nullptr));
+#endif // QT_NO_SHORTCUT
+        tabWidget->setTabText(tabWidget->indexOf(tab2D), QApplication::translate("MainWindow", "2D", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab3D), QApplication::translate("MainWindow", "3D", nullptr));
+        rayDock->setWindowTitle(QApplication::translate("MainWindow", "&Ray", nullptr));
+        rayAllButton->setText(QApplication::translate("MainWindow", "All", nullptr));
+        rayNoneButton->setText(QApplication::translate("MainWindow", "None", nullptr));
+        rayFeatures->setTitle(QApplication::translate("MainWindow", "Features", nullptr));
+        raySuperSamping->setText(QApplication::translate("MainWindow", "Super sampling", nullptr));
+        raySuperSamplesLabel->setText(QApplication::translate("MainWindow", "sqrt(samples)", nullptr));
         raySuperSamplesTextbox->setText(QString());
-        rayAntiAliasing->setText(QCoreApplication::translate("MainWindow", "Anti-aliasing", nullptr));
-        rayShadows->setText(QCoreApplication::translate("MainWindow", "Shadows", nullptr));
-        rayTextureMapping->setText(QCoreApplication::translate("MainWindow", "Texture Mapping", nullptr));
-        rayReflection->setText(QCoreApplication::translate("MainWindow", "Reflection", nullptr));
-        rayRefraction->setText(QCoreApplication::translate("MainWindow", "Refraction", nullptr));
-        rayMultiThreading->setText(QCoreApplication::translate("MainWindow", "Multithreading", nullptr));
-        rayUseKDTree->setText(QCoreApplication::translate("MainWindow", "Use KD tree", nullptr));
-        rayLighting->setTitle(QCoreApplication::translate("MainWindow", "Lighting", nullptr));
-        rayPointLights->setText(QCoreApplication::translate("MainWindow", "Point lights", nullptr));
-        rayDirectionalLights->setText(QCoreApplication::translate("MainWindow", "Directional lights", nullptr));
-        raySpotLights->setText(QCoreApplication::translate("MainWindow", "Spot lights", nullptr));
-        rayRenderButton->setText(QCoreApplication::translate("MainWindow", "Render!", nullptr));
-        rayStopRenderingButton->setText(QCoreApplication::translate("MainWindow", "Stop rendering", nullptr));
-        camtransDock->setWindowTitle(QCoreApplication::translate("MainWindow", "&Camtrans", nullptr));
-        cameraOrbitCheckbox->setText(QCoreApplication::translate("MainWindow", "Use orbit camera instead", nullptr));
-        cameraPosition->setTitle(QCoreApplication::translate("MainWindow", "Translation", nullptr));
-        cameraPositionLabelX->setText(QCoreApplication::translate("MainWindow", "X", nullptr));
-        cameraPositionLabelY->setText(QCoreApplication::translate("MainWindow", "Y", nullptr));
-        cameraPositionLabelZ->setText(QCoreApplication::translate("MainWindow", "Z", nullptr));
-        cameraRotation->setTitle(QCoreApplication::translate("MainWindow", "Rotation", nullptr));
-        cameraRotationLabelYaw->setText(QCoreApplication::translate("MainWindow", "U", nullptr));
-        cameraRotationLabelPitch->setText(QCoreApplication::translate("MainWindow", "V", nullptr));
-        cameraRotationLabelRoll->setText(QCoreApplication::translate("MainWindow", "W", nullptr));
-        resetUpVector->setText(QCoreApplication::translate("MainWindow", "Reset up vector", nullptr));
-        cameraResetAxis->setTitle(QCoreApplication::translate("MainWindow", "Reset", nullptr));
-        xAxisButton->setText(QCoreApplication::translate("MainWindow", "X axis", nullptr));
-        yAxisButton->setText(QCoreApplication::translate("MainWindow", "Y axis", nullptr));
-        zAxisButton->setText(QCoreApplication::translate("MainWindow", "Z axis", nullptr));
-        axonometricButton->setText(QCoreApplication::translate("MainWindow", "Axonometric", nullptr));
-        cameraFovLabel->setText(QCoreApplication::translate("MainWindow", "FOV", nullptr));
-        cameraNearLabel->setText(QCoreApplication::translate("MainWindow", "Near", nullptr));
-        cameraFarLabel->setText(QCoreApplication::translate("MainWindow", "Far", nullptr));
-        resetSliders->setText(QCoreApplication::translate("MainWindow", "Reset FOV / Near / Far", nullptr));
-        cameraAspectRatio->setText(QCoreApplication::translate("MainWindow", "Aspect ratio:", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Resize the window to change the aspect ratio.", nullptr));
-        menuFile->setTitle(QCoreApplication::translate("MainWindow", "&File", nullptr));
-        menuToolbars->setTitle(QCoreApplication::translate("MainWindow", "&Toolbars", nullptr));
+        rayAntiAliasing->setText(QApplication::translate("MainWindow", "Anti-aliasing", nullptr));
+        rayShadows->setText(QApplication::translate("MainWindow", "Shadows", nullptr));
+        rayTextureMapping->setText(QApplication::translate("MainWindow", "Texture Mapping", nullptr));
+        rayReflection->setText(QApplication::translate("MainWindow", "Reflection", nullptr));
+        rayRefraction->setText(QApplication::translate("MainWindow", "Refraction", nullptr));
+        rayMultiThreading->setText(QApplication::translate("MainWindow", "Multithreading", nullptr));
+        rayUseKDTree->setText(QApplication::translate("MainWindow", "Use KD tree", nullptr));
+        rayLighting->setTitle(QApplication::translate("MainWindow", "Lighting", nullptr));
+        rayPointLights->setText(QApplication::translate("MainWindow", "Point lights", nullptr));
+        rayDirectionalLights->setText(QApplication::translate("MainWindow", "Directional lights", nullptr));
+        raySpotLights->setText(QApplication::translate("MainWindow", "Spot lights", nullptr));
+        rayRenderButton->setText(QApplication::translate("MainWindow", "Render!", nullptr));
+        rayStopRenderingButton->setText(QApplication::translate("MainWindow", "Stop rendering", nullptr));
+        camtransDock->setWindowTitle(QApplication::translate("MainWindow", "&Camtrans", nullptr));
+        cameraOrbitCheckbox->setText(QApplication::translate("MainWindow", "Use orbit camera instead", nullptr));
+        cameraPosition->setTitle(QApplication::translate("MainWindow", "Translation", nullptr));
+        cameraPositionLabelX->setText(QApplication::translate("MainWindow", "X", nullptr));
+        cameraPositionLabelY->setText(QApplication::translate("MainWindow", "Y", nullptr));
+        cameraPositionLabelZ->setText(QApplication::translate("MainWindow", "Z", nullptr));
+        cameraRotation->setTitle(QApplication::translate("MainWindow", "Rotation", nullptr));
+        cameraRotationLabelYaw->setText(QApplication::translate("MainWindow", "U", nullptr));
+        cameraRotationLabelPitch->setText(QApplication::translate("MainWindow", "V", nullptr));
+        cameraRotationLabelRoll->setText(QApplication::translate("MainWindow", "W", nullptr));
+        resetUpVector->setText(QApplication::translate("MainWindow", "Reset up vector", nullptr));
+        cameraResetAxis->setTitle(QApplication::translate("MainWindow", "Reset", nullptr));
+        xAxisButton->setText(QApplication::translate("MainWindow", "X axis", nullptr));
+        yAxisButton->setText(QApplication::translate("MainWindow", "Y axis", nullptr));
+        zAxisButton->setText(QApplication::translate("MainWindow", "Z axis", nullptr));
+        axonometricButton->setText(QApplication::translate("MainWindow", "Axonometric", nullptr));
+        cameraFovLabel->setText(QApplication::translate("MainWindow", "FOV", nullptr));
+        cameraNearLabel->setText(QApplication::translate("MainWindow", "Near", nullptr));
+        cameraFarLabel->setText(QApplication::translate("MainWindow", "Far", nullptr));
+        resetSliders->setText(QApplication::translate("MainWindow", "Reset FOV / Near / Far", nullptr));
+        cameraAspectRatio->setText(QApplication::translate("MainWindow", "Aspect ratio:", nullptr));
+        label->setText(QApplication::translate("MainWindow", "Resize the window to change the aspect ratio.", nullptr));
+        menuFile->setTitle(QApplication::translate("MainWindow", "&File", nullptr));
+        menuToolbars->setTitle(QApplication::translate("MainWindow", "&Toolbars", nullptr));
     } // retranslateUi
 
 };
